@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Wedding RSVP Form</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+
+<body>
+
+    <h1>Sprint 1</h1>
+    <h2>Wedding RSVP Management System</h2>
+    <h3>Wedding RSVP Form</h3>
+	
+	<!-- Reusing form box from login page (SPRINT 1 LOGIC) -->
+	<div class="form-box">
+		<!-- form to obtain every guest sent by Flask and send into Flask-->
+        <form method="POST">
+		<!-- Grabs Flask list, and collects the data one tuple at time-->
+        {% for guest in guests %}
+
+            <input
+                type="checkbox"
+                id="guest{{ guest[0] }}"
+                name="guest"
+                value="{{ guest[0] }}"
+            >
+			<!-- taking the tuple and grabing the full name located within it to display -->
+            <label for="guest{{ guest[0] }}">
+                {{ guest[1] }} {{ guest[2] }}
+            </label>
+			<!-- br breaks the data to start new line. -->
+            <br>
+
+        {% endfor %}
+		
+			<br>
+
+			<input
+				type="checkbox"
+				id="no_one"
+				name="no_one"
+				value="no_one"
+			>
+
+			<label for="no_one">
+				No one is attending
+			</label>
+
+			<br><br>
+
+			<button type="submit">Submit RSVP</button>
+
+		</form>
+	</div>
+	<!-- connecting to my RSVP.js instrucitons for page rules-->
+	<script src="{{ url_for('static', filename='js/rsvp.js') }}"></script>
+
+</body>
+
+</html>
