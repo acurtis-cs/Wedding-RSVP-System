@@ -1,5 +1,7 @@
 # flask package is used to create my application
 from flask import Flask
+#Importing this to utilize the flash() funcition
+from flask import flash
 # tells flask to render the html file (display the html file in the browser)
 from flask import render_template
 # lets python receive data from the html file.
@@ -18,6 +20,9 @@ database = os.path.join(folder, "wedding.db")
 
 # creates the actual application
 app = Flask(__name__)
+#use for other features, but curretnly using it for flash() function to display messages.
+#simple key for demo purposes. [**production should use a more secure key***]
+app.secret_key = "wedding-rsvp-key"
 
 # this is setting our home page with the /
 # methods GET and POST are used to send and receive data from the html file
@@ -142,6 +147,8 @@ def rsvp(invite_id):
         connection.commit()
         connection.close()
 
+
+        flash("RSVP submitted successfully.")
         #send user back to dashboard after submission.
         return redirect(url_for("dashboard", invite_id=invite_id))
 

@@ -10,6 +10,14 @@
 	<h1>Sprint 1</h1>
 	<h2>Wedding RSVP Management System</h2>
     <h3>Wedding RSVP Dashboard</h3>
+	<!-- My confirmation submission message -->
+	{% with messages = get_flashed_messages() %}
+		{% if messages %}
+			{% for message in messages %}
+				<p>{{ message }}</p>
+			{% endfor %}
+		{% endif %}
+	{% endwith %}
 
 </body>
 
