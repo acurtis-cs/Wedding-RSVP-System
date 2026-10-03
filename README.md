@@ -1,12 +1,12 @@
-Wedding RSVP Management System
+# Wedding RSVP Management System
 
-Objective:
+## Objective:
 Build a wedding RSVP application that allows invited guests to log in with an authorized invitation email, submit and edit RSVP responses and meal selections, and view their own and other guests' current RSVP information.
 
-Project Documentation:
+## Project Documentation:
 See Product_Backlog_and_Sprints.docx for the most updated Product Backlog, Sprint Goals, and Sprint Backlogs.
 
-Technologies:
+### Technologies:
 - Python
 - Flask
 - SQLite
@@ -14,13 +14,13 @@ Technologies:
 - CSS
 - JavaScript
 
-Current Sprint Stage:
+### Current Sprint Stage:
 Sprint 1
 
-Sprint 1 Goal:
+### Sprint 1 Goal:
 Allow a wedding guest to log in, view the guests associated with their invitation, and submit an RSVP indicating who is attending or that no one is attending. 
 
-How to Run:
+### How to Run:
 1. Install Python
 2. Install Flask
 3. Run python app.py
