@@ -10,7 +10,7 @@ from flask import redirect
 from flask import url_for
 # sqlite3 is used to connect to the database I created.
 import sqlite3
-#Works fine in terminal, but issues when running py in IDE
+#Works fine in terminal, but issues when running .py in IDE
 #Having insurance that app works no matter how your running python file.
 import os
 folder = os.path.dirname(__file__)
@@ -84,14 +84,69 @@ def dashboard(invite_id):
 # RSVP page FORM displays when no RSVP (SPRINT 1 LOGIC )
 @app.route("/rsvp/<int:invite_id>", methods=["GET", "POST"])
 def rsvp(invite_id):
+
+    #-------------------------HANDLE RSVP FORM SUBMISSION-----------------------------
     #Handle the RSVP form submission.
     if request.method == "POST":
+
+        #Get information submitted from HTML RSVP form.
         selected_guests = request.form.getlist("guest")
         no_one = request.form.get("no_one")
 
-        print(selected_guests)
-        print(no_one)
-    
+        #---------------------FAIL SAFE SUBMISSION-----------------------
+        #Fail safe after javascript failed, if no guests selected and no_one not checked, return error.
+        if len(selected_guests) == 0 and no_one is None:
+            #opening database only to get names again
+            connection = sqlite3.connect(database)
+            cursor = connection.cursor()
+
+            cursor.execute(
+                "SELECT guest_id, first_name, last_name FROM guests WHERE invite_id = ?",
+                (invite_id,)
+            )
+            guests = cursor.fetchall()
+            connection.close()
+            #returning to RSVP page with error message and proper guest names again.
+            return render_template(
+                "rsvp.html", guests=guests, error="Please select at least one guest or check 'No one is attending'."
+            )
+
+        #---------------------UPDATE RSVP STATUS IN DATABASE-----------------------
+        #Opening Database to update RSVP from submission.
+        connection = sqlite3.connect(database)
+        cursor = connection.cursor()
+
+        #PATH if no one is attending
+        if no_one is not None:
+            cursor.execute(
+                "UPDATE guests SET rsvp_status = 'Not Attending' WHERE invite_id = ?",
+                (invite_id,)
+            )
+
+        #PATH if guest selected to attend
+        else:
+            #Conductin simple coverage if some guest not selected.
+            #Therefore all guest first set to Not Attending.
+            cursor.execute(
+                "UPDATE guests SET rsvp_status = 'Not Attending' WHERE invite_id = ?",
+                (invite_id,)
+            )
+
+            #Now updating the selected guests to Attending.
+            for guest_id in selected_guests:
+                cursor.execute(
+                    "UPDATE guests SET rsvp_status = 'Attending' WHERE guest_id = ? AND invite_id = ?",
+                    (guest_id, invite_id)
+                )
+        # Saving changes to the database.
+        connection.commit()
+        connection.close()
+
+        #send user back to dashboard after submission.
+        return redirect(url_for("dashboard", invite_id=invite_id))
+
+
+    #----------------------- INITIAL PAGE LOAD (GET GUEST)-----------------------
     #entering sql again
     connection = sqlite3.connect(database)
     cursor = connection.cursor()

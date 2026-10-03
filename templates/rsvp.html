@@ -16,6 +16,12 @@
 	<div class="form-box">
 		<!-- form to obtain every guest sent by Flask and send into Flask-->
         <form method="POST">
+		
+		<!--error catch if submission was sent blank -->
+		<!--javscript should catch this in future to prevent this but backup coded in -->
+		{% if error %}
+			<p>{{ error }}</p> <!--error message coded in python --> 
+		{% endif %}
 		<!-- Grabs Flask list, and collects the data one tuple at time-->
         {% for guest in guests %}
 
