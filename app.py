@@ -12,17 +12,25 @@ from flask import redirect
 from flask import url_for
 # sqlite3 is used to connect to the database I created.
 import sqlite3
+# Need a secret key that doesn't load into HUB. making an .env file to hold key
+# This is the import job is to read that .env file hodling my key.
+from dotenv import load_dotenv
 #Works fine in terminal, but issues when running .py in IDE
 #Having insurance that app works no matter how your running python file.
 import os
 folder = os.path.dirname(__file__)
+#providing the path to my secret key
+load_dotenv(os.path.join(folder, ".env"))
+#path to my data base
 database = os.path.join(folder, "wedding.db")
 
 # creates the actual application
 app = Flask(__name__)
 #use for other features, but curretnly using it for flash() function to display messages.
-#simple key for demo purposes. [**production should use a more secure key***]
-app.secret_key = "wedding-rsvp-key"
+
+
+# I Now established an actual secret key instead of a demo key for all. hidden in .env file 
+app.secret_key = os.environ["SECRET_KEY"]
 
 # this is setting our home page with the /
 # methods GET and POST are used to send and receive data from the html file
