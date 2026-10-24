@@ -5,6 +5,9 @@
 ## Project Objective
 Build a Wedding RSVP Management System that allows invited guests to log in using an authorized email, submit and manage RSVP responses, and select meals for the wedding reception.
 
+## Sprint 2 Goal (10/23/2026)
+Allow a wedding guest to select meals for their party, view updated RSVP statuses and meal selections within their respectable tabs.
+
 ## Sprint 1 Goal
 Allow a wedding guest to log in, view the guests associated with their invitation, and submit an RSVP indicating who is attending or that no one is attending.
 
