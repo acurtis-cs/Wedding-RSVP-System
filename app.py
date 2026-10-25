@@ -82,11 +82,12 @@ def dashboard(invite_id):
     # Closing Alwasy IMPORTANT!!!
     connection.close()
     #True False Variable created
-    no_rsvp = True
-    #If guest responded turn variable to False
+    no_rsvp = False
+    #If guest Not Responded turn variable to True
     for row in results:
-        if row[0] != "Not Responded":
-            no_rsvp = False
+        if row[0] == "Not Responded":
+            no_rsvp = True
+            break
     #When variable is True directed to the RSVP Form page. 
     if no_rsvp:
         return redirect(url_for("rsvp", invite_id=invite_id))
@@ -97,7 +98,8 @@ def dashboard(invite_id):
 # RSVP page FORM displays when no RSVP (SPRINT 1 LOGIC )
 @app.route("/rsvp/<int:invite_id>", methods=["GET", "POST"])
 def rsvp(invite_id):
-
+           
+    
     #-------------------------HANDLE RSVP FORM SUBMISSION-----------------------------
     #Handle the RSVP form submission.
     if request.method == "POST":
@@ -154,13 +156,21 @@ def rsvp(invite_id):
         # Saving changes to the database.
         connection.commit()
         connection.close()
+                
+        #-------------------- REDIRECT AFTER RSVP ---------------------------
 
+        # If no one is attending, return to dashboard.
+        # Simple check
+        if no_one is not None:
+            flash("RSVP submitted successfully.")
+            return redirect(url_for("dashboard", invite_id=invite_id))
 
-        flash("RSVP submitted successfully.")
-        #send user back to dashboard after submission.
-        return redirect(url_for("dashboard", invite_id=invite_id))
+        # If guests are attending, send them to Meal Selection Form.
+        else:
+            flash("RSVP submitted successfully.")
+            return redirect(url_for("meal", invite_id=invite_id))
 
-
+    
     #----------------------- INITIAL PAGE LOAD (GET GUEST)-----------------------
     #entering sql again
     connection = sqlite3.connect(database)
@@ -173,8 +183,8 @@ def rsvp(invite_id):
     #this varble grabes all informaiton we requested above in a list sebreated by tuples.
     guests = cursor.fetchall()
     #CLOSE database connection after fetching guest details!
-    connection.close()                
-    return render_template("rsvp.html", guests=guests)  #Now here we are sending guests information to guests in HTML 
+    connection.close()   
+    return render_template("rsvp.html", guests=guests)  #Now here we are sending guests information to guests in HTML
 
 
 
