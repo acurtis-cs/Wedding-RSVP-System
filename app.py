@@ -176,4 +176,49 @@ def rsvp(invite_id):
     connection.close()                
     return render_template("rsvp.html", guests=guests)  #Now here we are sending guests information to guests in HTML 
 
+
+
+
+#---------------------------------Meal slection FORM (SPRINT 2 Logic)-----------------------------------------------#
+#meal selection form reciving invite_id only
+@app.route("/meal/<int:invite_id>")
+def meal(invite_id):
+
+    # Open database connection
+    connection = sqlite3.connect(database)
+    #This is needed since we are placing data into foreign key section
+    #We're insuring we don't allow a non submission of a non existing foreign key
+    connection.execute("PRAGMA foreign_keys = ON")
+    cursor = connection.cursor()
+
+    # Retrieve only attending guests from the current invitation
+    # Using SQL instead of carry over so login page can send over as well without needing rsvp()
+    cursor.execute(
+        "SELECT guest_id, first_name, last_name FROM guests WHERE invite_id = ? AND rsvp_status = 'Attending'",
+        (invite_id,)
+    )
+
+    guests = cursor.fetchall()
+
+    # Retrieve all meal options
+    cursor.execute(
+        "SELECT meal_id, meal_name FROM meal_options"
+    )
+
+    meal_options = cursor.fetchall()
+
+    # Close database
+    connection.close()
+
+    # Send guest names and meal options to HTML
+    return render_template(
+        "meal.html",
+        guests=guests,
+        meal_options=meal_options
+    )
+
+
+
+
+
 app.run()
