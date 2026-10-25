@@ -191,14 +191,13 @@ def rsvp(invite_id):
 
 #---------------------------------Meal slection FORM (SPRINT 2 Logic)-----------------------------------------------#
 #meal selection form reciving invite_id only
-@app.route("/meal/<int:invite_id>")
+@app.route("/meal/<int:invite_id>", methods=["GET", "POST"])
 def meal(invite_id):
+
+    #---------------------- INITIAL PAGE LOAD (GET GUEST)---------------------------
 
     # Open database connection
     connection = sqlite3.connect(database)
-    #This is needed since we are placing data into foreign key section
-    #We're insuring we don't allow a non submission of a non existing foreign key
-    connection.execute("PRAGMA foreign_keys = ON")
     cursor = connection.cursor()
 
     # Retrieve only attending guests from the current invitation
@@ -220,6 +219,66 @@ def meal(invite_id):
     # Close database
     connection.close()
 
+    #----------------------- HANDLE MEAL FORM SUBMISSION -----------------------
+    if request.method == "POST":
+
+        # Check each guest's submitted meal selection
+        for guest in guests:
+            # guest[0] contains the guest_id
+            guest_id = guest[0]
+            # Using the unique ID on HTML and obtaining meal ID
+            selected_meal = request.form.get("meal_" + str(guest_id)) #naming convention (meal_#) in HTML holding meal ID for that guest
+
+            #---------------------------FAIL SAFE SUBMISSION-----------------------
+            # Check if a meal selection is missing (Note HTML does this too. this is coded back up)
+            if selected_meal is None or selected_meal == "":
+                return render_template(
+                    "meal.html",
+                    guests=guests,
+                    meal_options=meal_options,
+                    error="Please select a vaild meal for each guest."
+                )
+            
+            #---------------------------PLACE MEAL SELECTIONS IN DATABASE-----------------------
+            # Open database to save meal selections
+            connection = sqlite3.connect(database)
+            #This is needed since we are placing data into foreign key section in DB
+            #We're ensuring we don't allow a non submission of a non existing foreign key
+            connection.execute("PRAGMA foreign_keys = ON")
+            cursor = connection.cursor()
+
+            # Using try since database can send back an error if a non meal ID somehow gets sent out. 
+            try:
+                for guest in guests:
+                    guest_id = guest[0]
+                    selected_meal = request.form.get("meal_" + str(guest_id))
+
+                    cursor.execute(
+                        "INSERT INTO meal_selections (guest_id, meal_id) VALUES (?, ?)",
+                        (guest_id, selected_meal)
+                    )
+                # Submitting meal selection.
+                connection.commit()
+
+            except sqlite3.IntegrityError:
+                # Undo any inserts if a database constraint fails requring full party reselection
+                connection.rollback()
+                return render_template(
+                    "meal.html",
+                    guests=guests,
+                    meal_options=meal_options,
+                    error="Unable to save meal selections. Please try again."
+                )
+
+            finally:
+                # Always close database connection
+                connection.close()
+
+            flash("Meal selections submitted successfully.")
+            return redirect(url_for("dashboard", invite_id=invite_id))
+
+
+    #-----------------Intial page load render command------------------
     # Send guest names and meal options to HTML
     return render_template(
         "meal.html",
