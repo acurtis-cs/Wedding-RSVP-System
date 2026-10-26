@@ -19,6 +19,23 @@
 		{% endif %}
 	{% endwith %}
 
+
+	<!-- Sprint 2 Nav -->
+	<div class="nav">
+
+		<!-- RSVP Guest List -->
+		<a class="navButton" href="{{ url_for('rsvp_list', invite_id=invite_id) }}">
+			RSVP Guest List
+		</a>
+
+		<!-- Meal Selection List - disabled now -->
+		<button type="button" class="navButton" disabled>
+			Meal Selection List
+		</button>
+
+	</div>
+
+
 </body>
 
 </html>
