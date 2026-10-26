@@ -64,11 +64,13 @@ def home():
     return render_template("login.html")
 
 
-#Dasboard page fucntion, checks if any of the guests have RSVP. 
+#Dasboard page fucntion, checks if any of the guests have RSVP(SPRINT 1).
+# Checks if user is missing meal selections if applicable (SPRINT 2).
 # If not redirects to RSVP page (SPRINT 1 LOGIC).
 @app.route("/dashboard/<int:invite_id>")
 def dashboard(invite_id):
 
+    #-------------------- CHECK USER RSVP STATUS---------------------------------
     connection = sqlite3.connect(database)
     cursor = connection.cursor()
     #We obtain the invite_id from login. NOw using that varable again.
@@ -91,6 +93,40 @@ def dashboard(invite_id):
     #When variable is True directed to the RSVP Form page. 
     if no_rsvp:
         return redirect(url_for("rsvp", invite_id=invite_id))
+
+
+    #----------------------- CHECK APPLICABLE MEALS NEED -------------------------
+
+    # Open database to check attending guests and their meals
+    connection = sqlite3.connect(database)
+    cursor = connection.cursor()
+
+    # Retrieve attending guests and their saved meal selections
+    cursor.execute(
+        # used """ to help me clerly read and write thsi long SQL command. 
+        """SELECT guests.guest_id, meal_selections.meal_id FROM guests
+        LEFT JOIN meal_selections 
+        ON guests.guest_id = meal_selections.guest_id
+        WHERE guests.invite_id = ?
+        AND guests.rsvp_status = 'Attending'""",
+        (invite_id,)
+    )
+
+    meal_results = cursor.fetchall()
+    connection.close()
+
+    # Check if attending guests is missing a meal
+    missing_meal = False
+
+    for row in meal_results:
+        if row[1] is None:
+            missing_meal = True
+            break # If one is missing they all are so we break.
+
+    # Redirect to Meal Selection Form if a meal is missing
+    if missing_meal:
+        return redirect(url_for("meal", invite_id=invite_id))
+
 
     return render_template("dashboard.html")
 
