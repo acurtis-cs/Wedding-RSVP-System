@@ -1,0 +1,118 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Wedding RSVP Guest List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+
+<body>
+
+    <h1>Sprint 2</h1>
+    <h2>Wedding RSVP Management System</h2>
+    <h3>RSVP Guest List</h3>
+
+    <!-- Sprint 2 Nav -->
+	<div class="nav">
+
+		<!-- Dashboard -->
+		<a class="navButton" href="{{ url_for('dashboard', invite_id=invite_id) }}">
+			Dashboard
+		</a>
+
+		<!-- Meal Selection List - disabled now -->
+		<button type="button" class="navButton" disabled>
+			Meal Selection List
+		</button>
+
+	</div>
+
+    <!-- Current user's invitation information -->
+    <div class="form-box">
+
+        <h3>Your Invitation</h3>
+
+        <table class="guestTable">
+            <tr>
+                <th>Guest Name</th>
+                <th>RSVP Status</th>
+            </tr>
+
+            <!-- Display guests associated with current invitation -->
+            <!-- Received from Flask-->
+            {% for guest in invitation_guests %}
+            <tr>
+                <td>{{ guest[0] }} {{ guest[1] }}</td> <!--First and Last name-->
+
+                <td> <!--RSVP Status-->
+                    <span class="rsvpStatus
+                        {% if guest[2] == 'Attending' %}yes
+                        {% elif guest[2] == 'Not Responded' %}wait
+                        {% elif guest[2] == 'Not Attending' %}no
+                        {% endif %}">
+
+                        {{ guest[2] }}
+
+                    </span>
+                </td> 
+            </tr>
+            {% endfor %}
+
+        </table>
+
+    </div>
+
+    <br><br>
+
+    <!-- Display all invited guests -->
+    <div class="form-box">
+
+        <h3>All Invited Guests</h3>
+
+        <table class="guestTable">
+            <tr>
+                <th>Guest Name</th>
+                <th>RSVP Status</th>
+            </tr>
+
+            <!-- Display every guest from database -->
+            {% for guest in all_guests %}
+            <tr>
+                <td>{{ guest[0] }} {{ guest[1] }}</td> <!--First and Last name-->
+                
+                <td> <!--RSVP Status-->
+                    <span class="rsvpStatus
+                        {% if guest[2] == 'Attending' %}yes
+                        {% elif guest[2] == 'Not Responded' %}wait
+                        {% elif guest[2] == 'Not Attending' %}no
+                        {% endif %}">
+
+                        {{ guest[2] }}
+
+                    </span>
+                </td>
+            </tr>
+            {% endfor %}
+
+        </table>
+
+    </div>
+
+    <!-- Sprint 2 Nav -->
+	<div class="nav">
+
+		<!-- Dashboard -->
+		<a class="navButton" href="{{ url_for('dashboard', invite_id=invite_id) }}">
+			Dashboard
+		</a>
+
+		<!-- Meal Selection List - disabled now -->
+		<button type="button" class="navButton" disabled>
+			Meal Selection List
+		</button>
+
+	</div>
+
+</body>
+</html>

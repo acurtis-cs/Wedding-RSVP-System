@@ -128,7 +128,7 @@ def dashboard(invite_id):
         return redirect(url_for("meal", invite_id=invite_id))
 
 
-    return render_template("dashboard.html")
+    return render_template("dashboard.html", invite_id=invite_id)
 
 
 # RSVP page FORM displays when no RSVP (SPRINT 1 LOGIC )
@@ -323,6 +323,41 @@ def meal(invite_id):
     )
 
 
+
+# RSVP guest list displaying current invitation rsvp status and all guest as well
+@app.route("/rsvp_list/<int:invite_id>")
+def rsvp_list(invite_id):
+
+    # Open database connection
+    connection = sqlite3.connect(database)
+    cursor = connection.cursor()
+
+    # Retrieve guests associated with current invitation only
+    cursor.execute(
+        "SELECT first_name, last_name, rsvp_status FROM guests WHERE invite_id = ?",
+        (invite_id,)
+    )
+    # HTML variable
+    invitation_guests = cursor.fetchall()
+
+    # Retrieve all invited guests
+    # Invitation guest show up here as well. Supper easy coding this way. 
+    cursor.execute(
+        "SELECT first_name, last_name, rsvp_status FROM guests"
+    )
+    # HTML variable
+    all_guests = cursor.fetchall()
+
+    # Close database connection
+    connection.close()
+
+    # Send both guest lists to HTML
+    return render_template(
+        "rsvp_list.html",
+        invitation_guests=invitation_guests,
+        all_guests=all_guests,
+        invite_id=invite_id
+    )
 
 
 
