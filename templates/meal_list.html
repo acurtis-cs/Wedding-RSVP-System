@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Wedding Meal Selection List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+
+<body>
+
+    <h1>Sprint 2</h1>
+    <h2>Wedding RSVP Management System</h2>
+    <h3>Meal Selection List</h3>
+
+    <!-- Sprint 2 Nav -->
+	<div class="nav">
+
+		<!-- Dashboard -->
+		<a class="navButton" href="{{ url_for('dashboard', invite_id=invite_id) }}">
+			Dashboard
+		</a>
+
+		<!-- RSVP Guest List -->
+		<a class="navButton" href="{{ url_for('rsvp_list', invite_id=invite_id) }}">
+            RSVP Guest List
+        </a>
+
+	</div>
+
+    <!-- Current user's invitation meals -->
+    <div class="form-box">
+
+        <h3>Your Meals</h3>
+
+        <table class="guestTable">
+            <tr>
+                <th>Guest Name</th>
+                <th>Meal Selection</th>
+            </tr>
+
+            <!-- Display guests associated with current invitation -->
+            <!-- Received from Flask-->
+            {% if invitation_meals %}
+                {% for guest in invitation_meals %}
+                <tr>
+                    <td>{{ guest[0] }} {{ guest[1] }}</td>
+                    <td>{{ guest[2] }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="2"> <!--Spreads across both columns-->
+                        Your party currently has no meals selected.<br>
+                        If your attending select meals now.
+                    </td>
+                </tr>
+            {% endif %}
+
+        </table>
+
+    </div>
+
+    <br><br>
+
+    <!-- Display all invited guests -->
+    <div class="form-box">
+
+        <h3>All Meal Selections</h3>
+
+        <table class="guestTable">
+            <tr>
+                <th>Guest Name</th>
+                <th>Meal Selection</th>
+            </tr>
+
+            <!-- Display every guest from database -->
+            {% for guest in all_meals %}
+            <tr>
+                <td>{{ guest[0] }} {{ guest[1] }}</td> <!--First and Last name-->
+                <td>{{ guest[2] }}</td>
+            </tr>
+            {% endfor %}
+
+        </table>
+    </div>
+
+    <!-- Sprint 2 Nav -->
+	<div class="nav">
+
+		<!-- Dashboard -->
+		<a class="navButton" href="{{ url_for('dashboard', invite_id=invite_id) }}">
+			Dashboard
+		</a>
+
+		<!-- RSVP Guest List -->
+		<a class="navButton" href="{{ url_for('rsvp_list', invite_id=invite_id) }}">
+            RSVP Guest List
+        </a>
+
+	</div>
+
+</body>
+</html>

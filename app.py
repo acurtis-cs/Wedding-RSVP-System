@@ -275,43 +275,43 @@ def meal(invite_id):
                     error="Please select a vaild meal for each guest."
                 )
             
-            #---------------------------PLACE MEAL SELECTIONS IN DATABASE-----------------------
-            # Open database to save meal selections
-            connection = sqlite3.connect(database)
-            #This is needed since we are placing data into foreign key section in DB
-            #We're ensuring we don't allow a non submission of a non existing foreign key
-            connection.execute("PRAGMA foreign_keys = ON")
-            cursor = connection.cursor()
+        #---------------------------PLACE MEAL SELECTIONS IN DATABASE-----------------------
+        # Open database to save meal selections
+        connection = sqlite3.connect(database)
+        #This is needed since we are placing data into foreign key section in DB
+        #We're ensuring we don't allow a non submission of a non existing foreign key
+        connection.execute("PRAGMA foreign_keys = ON")
+        cursor = connection.cursor()
 
-            # Using try since database can send back an error if a non meal ID somehow gets sent out. 
-            try:
-                for guest in guests:
-                    guest_id = guest[0]
-                    selected_meal = request.form.get("meal_" + str(guest_id))
+        # Using try since database can send back an error if a non meal ID somehow gets sent out. 
+        try:
+            for guest in guests:
+                guest_id = guest[0]
+                selected_meal = request.form.get("meal_" + str(guest_id))
 
-                    cursor.execute(
-                        "INSERT INTO meal_selections (guest_id, meal_id) VALUES (?, ?)",
-                        (guest_id, selected_meal)
-                    )
-                # Submitting meal selection.
-                connection.commit()
-
-            except sqlite3.IntegrityError:
-                # Undo any inserts if a database constraint fails requring full party reselection
-                connection.rollback()
-                return render_template(
-                    "meal.html",
-                    guests=guests,
-                    meal_options=meal_options,
-                    error="Unable to save meal selections. Please try again."
+                cursor.execute(
+                    "INSERT INTO meal_selections (guest_id, meal_id) VALUES (?, ?)",
+                    (guest_id, selected_meal)
                 )
+            # Submitting meal selection.
+            connection.commit()
 
-            finally:
-                # Always close database connection
-                connection.close()
+        except sqlite3.IntegrityError:
+            # Undo any inserts if a database constraint fails requring full party reselection
+            connection.rollback()
+            return render_template(
+                "meal.html",
+                guests=guests,
+                meal_options=meal_options,
+                error="Unable to save meal selections. Please try again."
+            )
 
-            flash("Meal selections submitted successfully.")
-            return redirect(url_for("dashboard", invite_id=invite_id))
+        finally:
+            # Always close database connection
+            connection.close()
+
+        flash("Meal selections submitted successfully.")
+        return redirect(url_for("dashboard", invite_id=invite_id))
 
 
     #-----------------Intial page load render command------------------
@@ -356,6 +356,55 @@ def rsvp_list(invite_id):
         "rsvp_list.html",
         invitation_guests=invitation_guests,
         all_guests=all_guests,
+        invite_id=invite_id
+    )
+
+
+
+
+@app.route("/meal_list/<int:invite_id>")
+def meal_list(invite_id):
+
+    # Open database connection
+    connection = sqlite3.connect(database)
+    cursor = connection.cursor()
+
+    # Retrieve saved meals associated with invitation
+    cursor.execute(
+        """SELECT guests.first_name, guests.last_name, meal_options.meal_name
+        FROM guests
+        JOIN meal_selections
+        ON guests.guest_id = meal_selections.guest_id
+        JOIN meal_options
+        ON meal_selections.meal_id = meal_options.meal_id
+        WHERE guests.invite_id = ?
+        AND guests.rsvp_status = 'Attending'""",
+        (invite_id,)
+    )
+
+    invitation_meals = cursor.fetchall()
+
+    # Retrieve all attending guests meal selections
+    cursor.execute(
+        """SELECT guests.first_name, guests.last_name, meal_options.meal_name
+        FROM guests
+        JOIN meal_selections
+        ON guests.guest_id = meal_selections.guest_id
+        JOIN meal_options
+        ON meal_selections.meal_id = meal_options.meal_id
+        WHERE guests.rsvp_status = 'Attending'"""
+    )
+
+    all_meals = cursor.fetchall()
+
+    # Close database connection
+    connection.close()
+
+    # Send both lists to HTML
+    return render_template(
+        "meal_list.html",
+        invitation_meals=invitation_meals,
+        all_meals=all_meals,
         invite_id=invite_id
     )
 
