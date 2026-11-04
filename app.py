@@ -1,3 +1,7 @@
+# Importing function from calculations.py
+from calculations import calculate_rsvp_totals
+# Importing function from database.py
+from database import fetch_data
 # flask package is used to create my application
 from flask import Flask
 #Importing this to utilize the flash() funcition
@@ -126,9 +130,17 @@ def dashboard(invite_id):
     # Redirect to Meal Selection Form if a meal is missing
     if missing_meal:
         return redirect(url_for("meal", invite_id=invite_id))
+    
+
+    #------------------ RSVP ATTENDANCE TOTALS (S2-20) -------------------
 
 
-    return render_template("dashboard.html", invite_id=invite_id)
+    guests = fetch_data("SELECT rsvp_status FROM guests")
+    # Call our calculation function from calculations.py providing the guests list
+    totals = calculate_rsvp_totals(guests)
+
+    # Render the dashboard with the calculated RSVP totals and current invite_id
+    return render_template("dashboard.html", invite_id=invite_id, totals=totals)
 
 
 # RSVP page FORM displays when no RSVP (SPRINT 1 LOGIC )
