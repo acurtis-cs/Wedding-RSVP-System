@@ -84,3 +84,52 @@ h2, h3{
 .rsvpStatus.no {
     background-color: #fce0e0;
 }
+
+
+
+
+
+/************************DASHBOARD.HTML PAGE ONLY**************************/
+
+/* RSVP Status Totals */
+/* RSVP Totals Main Container */
+.rsvp-totals {
+    border: 2px solid black;
+    width: 550px;
+    max-width: 90%;
+    box-sizing: border-box;
+    padding: 10px;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.totalsGrid {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 15px auto;
+}
+
+.totalCard {
+    box-sizing: border-box;
+    flex: 1;
+    min-width: 0;
+    height: 75px;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    text-align: center;
+    padding: 8px 3px;
+}
+
+.totalCard h3 {
+    font-size: 22px;
+    margin: 4px 0;
+}
+
+.totalCard p {
+    font-size: 12px;
+    margin: 4px 0;
+}
+
+
