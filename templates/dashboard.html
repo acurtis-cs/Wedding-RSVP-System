@@ -1,41 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <title>Wedding RSVP Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-</head>
+	<head>
+		<title>Wedding RSVP Dashboard</title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+	</head>
 
-<body>
-	<h1>Sprint 1</h1>
-	<h2>Wedding RSVP Management System</h2>
-    <h3>Wedding RSVP Dashboard</h3>
-	<!-- My confirmation submission message -->
-	{% with messages = get_flashed_messages() %}
-		{% if messages %}
-			{% for message in messages %}
-				<p>{{ message }}</p>
-			{% endfor %}
-		{% endif %}
-	{% endwith %}
-
-
-	<!-- Sprint 2 Nav -->
-	<div class="nav">
-
-		<!-- RSVP Guest List -->
-		<a class="navButton" href="{{ url_for('rsvp_list', invite_id=invite_id) }}">
-			RSVP Guest List
-		</a>
-
-		<!-- Meal Selection List -->
-		<a class="navButton" href="{{ url_for('meal_list', invite_id=invite_id) }}">
-			Meal Selection List
-		</a>
-
-	</div>
+	<body>
+		<h1>Sprint 1</h1>
+		<h2>Wedding RSVP Management System</h2>
+		<h3>Wedding RSVP Dashboard</h3>
+		<!-- My confirmation submission message -->
+		{% with messages = get_flashed_messages() %}
+			{% if messages %}
+				{% for message in messages %}
+					<p>{{ message }}</p>
+				{% endfor %}
+			{% endif %}
+		{% endwith %}
 
 
-</body>
+		<!-- Sprint 2 Nav -->
+		<div class="nav">
+
+			<!-- RSVP Guest List -->
+			<a class="navButton" href="{{ url_for('rsvp_list', invite_id=invite_id) }}">
+				RSVP Guest List
+			</a>
+
+			<!-- Meal Selection List -->
+			<a class="navButton" href="{{ url_for('meal_list', invite_id=invite_id) }}">
+				Meal Selection List
+			</a>
+
+		</div>
+
+
+		<!-- RSVP Attendance Totals (S2-21) -->
+		<div class="rsvp-totals"> 
+
+			<h3>RSVP Status Totals</h3>
+
+			<div class="totalsGrid">
+
+				<div class="totalCard">
+					<h3>{{ totals["total_invited"] }}</h3>
+					<p>Total Invited</p>
+				</div>
+
+				<div class="totalCard">
+					<h3>{{ totals["attending"] }}</h3>
+					<p>Attending</p>
+				</div>
+
+				<div class="totalCard">
+					<h3>{{ totals["not_attending"] }}</h3>
+					<p>Not Attending</p>
+				</div>
+
+				<div class="totalCard">
+					<h3>{{ totals["not_responded"] }}</h3>
+					<p>Not Responded</p>
+				</div>
+			</div>
+		</div>
+
+
+
+	</body>
 
 </html>
