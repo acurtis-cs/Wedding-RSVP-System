@@ -5,6 +5,10 @@
 ## Project Objective
 Build a Wedding RSVP Management System that allows invited guests to log in using an authorized email, submit and manage RSVP responses, and select meals for the wedding reception.
 
+## Updated Sprint 2 Goal (11/01/2026)
+Allow wedding guests to select meals for attending guests, view current RSVP statuses and meal selections, attendance totals, meal totals, sorting, and filtering to easily review wedding guest information.
+
+
 ## Sprint 2 Goal (10/23/2026)
 Allow a wedding guest to select meals for their party, view updated RSVP statuses and meal selections within their respectable tabs.
 
@@ -13,6 +17,7 @@ Allow a wedding guest to log in, view the guests associated with their invitatio
 
 ### Technologies:
 - Python 3.13.14
+- pytest 9.2.0
 - Flask 3.1.3 
 - python-dotenv 1.2.4
 - SQLite 
@@ -112,6 +117,64 @@ The following steps are reviewer instructions for user stories completed during 
     5. Select "No one is attending" and submit.
     6. Verify all associated guests are saved as "Not Attending".
     7. Confirm the application returns to the dashboard.
+
+
+### Trying the Sprint 2 Functionality
+
+The following steps are reviewer instructions for user stories completed during Sprint 2.
+
+- Meal Selection Form
+    1. Open the application and log in using a registered guest email.
+    2. Complete the RSVP form and select at least one attending guest.
+    3. After submitting the RSVP, the Meal Selection Form automatically appears.
+    4. Verify that only attending guests are displayed.
+    5. Attempt to submit without selecting a meal for every guest. Verify submission is prevented.
+    6. Select a meal for each attending guest and submit.
+    7. Verify that a confirmation message appears and the application returns to the dashboard.
+    8. Confirm completed meal selections in DB with DB Browser SQLite.
+
+- RSVP Guest List
+    1. Log in using an invitation with completed RSVP information.
+    2. Select the RSVP Guest List button on the dashboard.
+    3. Verify that the current invitation's guests appear in the Your Invitation section.
+    4. Verify that all invited guests are displayed in the All Invited Guests section.
+    5. Confirm that Attending, Not Attending, and Not Responded statuses are displayed correctly.
+    6. Log in using a different invitation to verify that the Your Invitation section changes accordingly.
+
+- Meal Selection List
+    1. Select the Meal Selection List button from the dashboard.
+    2. Verify that the Your Meals section displays the current invitation's attending guests with saved meals.
+    3. Verify that the All Meal Selections section displays attending guests with saved meal selections.
+    4. Confirm that nonattending guests do not appear in the meal list.
+    5. Verify that each guest's selected meal is displayed correctly.
+
+- RSVP Attendance Totals
+    1. Log in using an invitation with completed RSVP and meal information, if applicable.
+    2. Verify you're on the dashboard page.
+    3. Verify that the RSVP Status Totals section displays Total Invited, Attending, Not Attending, and Not Responded.
+    4. Verify that the totals are accurate with current guest records in the database.
+    5. After changing RSVP data through the normal submission workflow, return to the dashboard and verify that the totals reflect the saved information.
+
+
+### Automated Testing (Sprint 2)
+
+The application uses pytest to perform automated tests of the new Sprint 2 logic.
+
+- Running Automated Tests
+    1. Open a Windows PowerShell terminal in the Wedding-RSVP-System project folder containing `calculations.py`.
+    2. Install the required dependencies using `python -m pip install -r requirements.txt`.
+    3. Run the automated tests using `python -m pytest -v`.
+    4. Review the terminal output to confirm all automated tests pass.
+
+**Attendance Totals Tests**
+- Test File: `tests/test_rsvp_totals.py`
+    1. `test_rsvp_totals`: Verifies that total invited, attending, not attending, and not responded guests are counted correctly.
+    2. `test_empty_guest_list`: Verifies that an empty guest list produces zero for all attendance totals.
+    3. `test_updated_rsvp_totals`: Verifies that attendance totals are recalculated correctly when RSVP information changes.
+
+These tests use sample guest records and do not modify the application's `wedding.db` database.
+
+The automated tests verify the calculation logic. Dashboard display and database integration are checked manually as part of verify testing.
 
 ### Known limitations
 
