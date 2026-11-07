@@ -25,3 +25,32 @@ def calculate_rsvp_totals(guests):
             totals["not_responded"] += 1
     # Return all four totals
     return totals
+
+
+# Calculate total selections for each meal
+def calculate_meal_totals(meal_options, meal_selections):
+    # Creating dictionary variable to store meal names
+    meal_names = {}
+    # Creating dictionary variable to store meal totals
+    totals = {}
+
+    # Match meal IDs to names and initialize totals
+    for meal in meal_options:
+        meal_id = meal[0]
+        meal_name = meal[1]
+        # Store meal name and initialize its total to zero
+        meal_names[meal_id] = meal_name
+        totals[meal_name] = 0
+
+    # Count saved meal selections
+    for selection in meal_selections:
+        # Get the meal ID from the selection
+        meal_id = selection[0]
+        # Get the meal name from the meal ID
+        meal_name = meal_names[meal_id]
+        # Increase the total for the selected meal
+        totals[meal_name] += 1
+
+    return totals
+
+
