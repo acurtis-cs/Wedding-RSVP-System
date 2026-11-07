@@ -1,5 +1,5 @@
 # Importing function from calculations.py
-from calculations import calculate_rsvp_totals
+from calculations import calculate_meal_totals, calculate_rsvp_totals
 # Importing function from database.py
 from database import fetch_data
 # flask package is used to create my application
@@ -412,12 +412,26 @@ def meal_list(invite_id):
     # Close database connection
     connection.close()
 
+    #------------------ MEAL SELECTION TOTALS (S2-23) -------------------
+    # Retrieve meal options and their IDs
+    meal_options = fetch_data(
+        "SELECT meal_id, meal_name FROM meal_options"
+    )
+    # Retrieve saved meal selections
+    meal_selections = fetch_data(
+        "SELECT meal_id FROM meal_selections"
+    )
+
+    # Calculate totals
+    meal_totals = calculate_meal_totals(meal_options, meal_selections)
+
     # Send both lists to HTML
     return render_template(
         "meal_list.html",
         invitation_meals=invitation_meals,
         all_meals=all_meals,
-        invite_id=invite_id
+        invite_id=invite_id,
+        meal_totals=meal_totals
     )
 
 
