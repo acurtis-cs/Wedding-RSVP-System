@@ -38,8 +38,9 @@ def calculate_meal_totals(meal_options, meal_selections):
     for meal in meal_options:
         meal_id = meal[0]
         meal_name = meal[1]
-        # Store meal name and initialize its total to zero
+        # Store meal name linked with meal ID
         meal_names[meal_id] = meal_name
+        # Store meal name linked with its total count
         totals[meal_name] = 0
 
     # Count saved meal selections

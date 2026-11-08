@@ -422,7 +422,7 @@ def meal_list(invite_id):
         "SELECT meal_id FROM meal_selections"
     )
 
-    # Calculate totals
+    # Calculate totals and save in meal_totals variable that send to html
     meal_totals = calculate_meal_totals(meal_options, meal_selections)
 
     # Send both lists to HTML
