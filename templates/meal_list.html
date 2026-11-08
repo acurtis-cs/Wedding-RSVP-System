@@ -27,6 +27,22 @@
 
 	</div>
 
+
+    <!-- Meal Selection Totals (S2-24) -->
+    <div class="meal-totals">
+        <h3>Meal Selection Totals</h3>
+
+        <div class="mealTotalsGrid">
+            {% for meal_name, count in meal_totals.items() %}
+                <div class="mealTotalCard">
+                    <h3>{{ count }}</h3>
+                    <p>{{ meal_name }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
     <!-- Current user's invitation meals -->
     <div class="form-box">
 
