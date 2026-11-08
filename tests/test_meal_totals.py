@@ -44,7 +44,7 @@ def test_empty_meal_selections():
     assert totals["Vegetarian"] == 0
 
 
-# Test 3: Meal totals change after new selections
+# Test 3: Large dataset meal totals with change after new selections
 def test_updated_meal_totals():
     # Expanded meal options
     meal_options = [
