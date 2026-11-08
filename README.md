@@ -156,6 +156,16 @@ The following steps are reviewer instructions for user stories completed during 
     5. After changing RSVP data through the normal submission workflow, return to the dashboard and verify that the totals reflect the saved information.
 
 
+- Meal Selection Totals
+    1. Log in using an invitation with completed RSVP and meal information, if applicable.
+    2. Select the Meal Selection List button from the dashboard.
+    3. Verify that the Meal Selection Totals section displays each available meal and its total selections.
+    4. Confirm the totals are accurate with current meal selection records in the database.
+    5. Verify that meals with no selections display a total of zero.
+    6. After submitting additional meal selections, return to the Meal Selection List and verify that the totals reflect the saved information.
+
+
+
 ### Automated Testing (Sprint 2)
 
 The application uses pytest to perform automated tests of the new Sprint 2 logic.
@@ -172,9 +182,17 @@ The application uses pytest to perform automated tests of the new Sprint 2 logic
     2. `test_empty_guest_list`: Verifies that an empty guest list produces zero for all attendance totals.
     3. `test_updated_rsvp_totals`: Verifies that attendance totals are recalculated correctly when RSVP information changes.
 
-These tests use sample guest records and do not modify the application's `wedding.db` database.
 
-The automated tests verify the calculation logic. Dashboard display and database integration are checked manually as part of verify testing.
+**Meal Selection Totals Tests**
+- Test File: `tests/test_meal_totals.py`
+    1. `test_meal_totals`: Verifies that saved meal selections are counted correctly, including meals with zero selections.
+    2. `test_empty_meal_selections`: Verifies that no saved meal selections produce zero for all available meal totals.
+    3. `test_updated_meal_totals`: Verifies that meal totals are recalculated correctly when additional meal selections are added.
+
+
+These tests use sample guest records and meal selections and do not modify the application's `wedding.db` database.
+
+The automated tests verify the calculation logic. Dashboard and Meal Selection List displays and database integration are checked manually as part of verification testing.
 
 ### Known limitations
 

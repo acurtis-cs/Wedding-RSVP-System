@@ -133,3 +133,45 @@ h2, h3{
 }
 
 
+
+
+
+/************************MEAL_LIST.HTML PAGE ONLY**************************/
+.meal-totals {
+    border: 2px solid black;
+    width: 550px;
+    max-width: 90%;
+    box-sizing: border-box;
+    padding: 10px;
+    text-align: center;
+    margin: 20px auto;
+}
+
+.mealTotalsGrid {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 15px auto;
+}
+
+.mealTotalCard {
+    box-sizing: border-box;
+    flex: 1;
+    min-width: 0;
+    height: 75px;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    text-align: center;
+    padding: 8px 3px;
+}
+
+.mealTotalCard h3 {
+    font-size: 22px;
+    margin: 4px 0;
+}
+
+.mealTotalCard p {
+    font-size: 12px;
+    margin: 4px 0;
+}
