@@ -83,19 +83,23 @@
 
         <h3>All Meal Selections</h3>
 
-        <table class="guestTable">
-            <tr>
-                <th>Guest Name</th>
-                <th>Meal Selection</th>
-            </tr>
+        <table class="guestTable sortable-table">
+            <thead>
+                <tr>
+                    <th><button type="button" class="sort-by-name">Guest Name <span>-</span></button></th>
+                    <th>Meal Selection</th>
+                </tr>
+            </thead>
 
-            <!-- Display every guest from database -->
-            {% for guest in all_meals %}
-            <tr>
-                <td>{{ guest[0] }} {{ guest[1] }}</td> <!--First and Last name-->
-                <td>{{ guest[2] }}</td>
-            </tr>
-            {% endfor %}
+            <tbody>
+                <!-- Display every guest from database -->
+                {% for guest in all_meals %}
+                <tr data-first-name="{{ guest[0] }}">
+                    <td>{{ guest[0] }} {{ guest[1] }}</td> <!--First and Last name-->
+                    <td>{{ guest[2] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
 
         </table>
     </div>
@@ -114,6 +118,6 @@
         </a>
 
 	</div>
-
+    <script src="{{ url_for('static', filename='js/list-sort.js') }}"></script>
 </body>
 </html>
