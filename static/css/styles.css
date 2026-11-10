@@ -45,18 +45,47 @@ h2, h3{
 
 
 
+/* ---------Sort button styling ---------- */
+
+
+/* Guest Name Sorting Button (S2-26 and S2-28) */
+.sort-by-name {
+    background-color: whitesmoke;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    padding: 6px 12px;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+/* Hover effect */
+.sort-by-name:hover {
+    background-color: darkgrey;
+}
+
+/* Click effect */
+.sort-by-name:active {
+    background-color: grey;
+}
+
+/* Sorting symbol */
+.sort-by-name span {
+    margin-left: 6px;
+    font-weight: bold;
+}
 
 
 
-
-/************************RSVR_LIST.HTML PAGE ONLY**************************/
-.guest-table {
+/************************RSVP_LIST.HTML PAGE ONLY**************************/
+.guestTable {
     width: 100%;
     border-collapse: collapse;
 }
 
-.guest-table th,
-.guest-table td {
+.guestTable th,
+.guestTable td {
     border: 1px solid black;
     padding: 10px;
     text-align: left;
