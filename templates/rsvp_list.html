@@ -66,16 +66,16 @@
     <br><br>
 
     <!-- Display all invited guests -->
-    <div class="form-box">
+    <div class="form-box list-box"> <!--list-box is fixing sizing issue with the table-->
 
         <h3>All Invited Guests</h3>
 
-        <table class="guestTable sortable-table">
+        <table class="guestTable sortable-table filterable-table">
             <thead>
                 <tr>
                     <th><button type="button" class="sort-by-name">Guest Name <span>-</span></button></th>
-                    <th>RSVP Status</th>
-                </tr>
+                    <th><select class="filter-by-value" aria-label="Filter RSVP Status"><option value="">RSVP Status</option></select></th>
+                </tr> 
             </thead>
 
             <tbody>
@@ -116,5 +116,6 @@
 
 	</div>
     <script src="{{ url_for('static', filename='js/list-sort.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/list-filter.js') }}"></script>
 </body>
 </html>
