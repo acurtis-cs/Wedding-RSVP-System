@@ -24,11 +24,17 @@ Allow a wedding guest to log in, view the guests associated with their invitatio
 - HTML
 - CSS
 - JavaScript
+- Node.js 26.13.0
+- npm 11.20.0
+- Vitest 5.1.0
+- jsdom 31.0.0
+
 
 
 ### Prerequisites
 
 - Python 3.13.14 or compatible version to run requirements
+- Node.js with npm for JavaScript automated testing. Download Node.js from https://nodejs.org/en/download (npm is included).
 - Git to clone
 - DB Browswer for SQLite 3.13.1 for managing database values.
 
@@ -42,6 +48,9 @@ Allow a wedding guest to log in, view the guests associated with their invitatio
 3. Open a Windows PowerShell terminal in the project folder containing app.py. 
 
 4. Install the required Python packages in terminal using: python -m pip install -r requirements.txt
+
+5. Install the JavaScript testing packages in terminal using: npm.cmd ci
+    - NOTE: Node.js and npm are only needed for JavaScript automated testing. 
 
 
 ### Configuration
@@ -164,17 +173,41 @@ The following steps are reviewer instructions for user stories completed during 
     5. Verify that meals with no selections display a total of zero.
     6. After submitting additional meal selections, return to the Meal Selection List and verify that the totals reflect the saved information.
 
+- RSVP Guest List Sorting and Filtering
+    1. Open the RSVP Guest List.
+    2. Click 'ALL invitations' Guest Name once to sort alphabetically by first name, symbol (↑).
+    3. Click again to sort in reverse alphabetical order, symbol (↓), then a third time to restore the original order, symbol (-).
+    4. Select a status from the RSVP Status dropdown to display only guests with that status.
+    5. Verify that sorting continues to work while a filter is selected.
+    6. Select RSVP Status again in dropdown to restore all guests.
+    
+- Meal Selection List Sorting and Filtering
+    1. Open the Meal Selection List.
+    2. Click 'ALL invitations' Guest Name once to sort alphabetically by first name, symbol (↑).
+    3. Click again to sort in reverse alphabetical order, symbol (↓), then a third time to restore the original order, symbol (-).
+    4. Select a meal from the Meal Selection dropdown to display only guests with that meal.
+    5. Verify that sorting continues to work while a filter is selected.
+    6. Select Meal Selection again in dropdown to restore all meal selections.
+
 
 
 ### Automated Testing (Sprint 2)
 
 The application uses pytest to perform automated tests of the new Sprint 2 logic.
 
-- Running Automated Tests
+- Running Python Automated Tests
     1. Open a Windows PowerShell terminal in the Wedding-RSVP-System project folder containing `calculations.py`.
     2. Install the required dependencies using `python -m pip install -r requirements.txt`.
-    3. Run the automated tests using `python -m pytest -v`.
+    3. Run the automated tests using `python -m pytest -v` in terminal.
     4. Review the terminal output to confirm all automated tests pass.
+
+- Running JavaScript Automated Tests
+    1. Open a Windows PowerShell terminal in the Wedding-RSVP-System project folder containing `package.json`.
+    2. Verify Node.js and npm are installed using `node -v` and `npm.cmd -v`.
+    3. Install the JavaScript testing dependencies using `npm.cmd ci`.
+    4. Run the automated tests using `npm.cmd test`.
+    5. Review the terminal output to confirm all automated tests pass.
+
 
 **Attendance Totals Tests**
 - Test File: `tests/test_rsvp_totals.py`
@@ -189,12 +222,19 @@ The application uses pytest to perform automated tests of the new Sprint 2 logic
     2. `test_empty_meal_selections`: Verifies that no saved meal selections produce zero for all available meal totals.
     3. `test_updated_meal_totals`: Verifies that meal totals are recalculated correctly when additional meal selections are added.
 
+**Sorting and Filtering Tests**
+- Test File: `tests/list_sort_filter.test.js`
+  1. `RSVP sorting cycles through all three states`: Verifies original, alphabetical, reverse alphabetical, and restored order.
+  2. `RSVP filtering shows only matching guests`: Verifies that the dropdown displays matching RSVP statuses and can restore all rows.
+  3. `Meal List sorting and filtering works`: Verifies meal selection filtering and alphabetical sorting together.
+  4. `Empty table works without errors`: Verifies that an empty table does not cause errors during sorting or filtering.
 
-These tests use sample guest records and meal selections and do not modify the application's `wedding.db` database.
 
-The automated tests verify the calculation logic. Dashboard and Meal Selection List displays and database integration are checked manually as part of verification testing.
+The Python tests use sample guest records and meal selections. The JavaScript tests create a sample HTML table and load `list-sort.js` and `list-filter.js` files using jsdom. These automated tests do not modify or access the application's `wedding.db` database.
+
+The automated tests verify the calculation, sorting, and filtering logic. Dashboard and Meal Selection List displays with database integration and database results are checked manually as part of verification testing.
 
 ### Known limitations
 
-Sprint 1 only focuses on the initial guest login and RSVP submission workflow. Users can't see their RSVP status, delete or edit them after submission. Meal’s selection is not available or status given yet. Viewing any database information is done through SQLight. Application currently has no user ability to initiate RSVP selection, the system atomically initiates RSVP form after login if user’s party has RSVP status “Not Responded”
+Current abilities of the application allow guests to submit RSVP responses, select meals, view RSVP and meal information, and sort or filter guest and meal list. Users can't delete or edit RSVP or meals after submission. Application currently has no user ability to initiate RSVP or meal selection, the system atomically initiates RSVP form then meal form after login if user’s party has RSVP status “Not Responded” or RSVP status "Attending" with no meal selection. Meal options must be managed directly in SQLite. Login currently uses an authorized email without password authentication.
 
