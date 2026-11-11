@@ -1,0 +1,28 @@
+{
+  "name": "wedding-rsvp-system",
+  "version": "1.0.0",
+  "description": "Build a Wedding RSVP Management System that allows invited guests to log in using an authorized email, submit and manage RSVP responses, and select meals for the wedding reception.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "vitest run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/acurtis-cs/Wedding-RSVP-System.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/acurtis-cs/Wedding-RSVP-System/issues"
+  },
+  "homepage": "https://github.com/acurtis-cs/Wedding-RSVP-System#readme",
+  "devDependencies": {
+    "jsdom": "^31.0.0",
+    "vitest": "^5.1.0"
+  }
+}
