@@ -75,18 +75,12 @@ def home():
 def dashboard(invite_id):
 
     #-------------------- CHECK USER RSVP STATUS---------------------------------
-    connection = sqlite3.connect(database)
-    cursor = connection.cursor()
-    #We obtain the invite_id from login. NOw using that varable again.
-    #Need to find the connected guest RSVP status to decided next step.
-    cursor.execute(
-        "SELECT rsvp_status FROM guests WHERE invite_id = ?",
-        (invite_id,)
+    # Retrieve the RSVP status for guests associated with the invite_id utilizing
+    # the fetch_data function. (Sprint 2 [S2-31] update)
+    results = fetch_data(
+        "SELECT rsvp_status FROM guests WHERE invite_id = ?", #query section
+        (invite_id,) #parameter section
     )
-
-    results = cursor.fetchall()
-    # Closing Alwasy IMPORTANT!!!
-    connection.close()
     #True False Variable created
     no_rsvp = False
     #If guest Not Responded turn variable to True
@@ -100,24 +94,17 @@ def dashboard(invite_id):
 
 
     #----------------------- CHECK APPLICABLE MEALS NEED -------------------------
-
-    # Open database to check attending guests and their meals
-    connection = sqlite3.connect(database)
-    cursor = connection.cursor()
-
-    # Retrieve attending guests and their saved meal selections
-    cursor.execute(
+    # Retrieve attending guests and their saved meal selections with the invite_id
+    # utilizing the fetch_data function. (Sprint 2 [S2-31] update)
+    meal_results = fetch_data(
         # used """ to help me clerly read and write thsi long SQL command. 
         """SELECT guests.guest_id, meal_selections.meal_id FROM guests
         LEFT JOIN meal_selections 
         ON guests.guest_id = meal_selections.guest_id
         WHERE guests.invite_id = ?
-        AND guests.rsvp_status = 'Attending'""",
-        (invite_id,)
+        AND guests.rsvp_status = 'Attending'""", #query section
+        (invite_id,) #parameter section
     )
-
-    meal_results = cursor.fetchall()
-    connection.close()
 
     # Check if attending guests is missing a meal
     missing_meal = False
@@ -159,16 +146,12 @@ def rsvp(invite_id):
         #---------------------FAIL SAFE SUBMISSION-----------------------
         #Fail safe after javascript failed, if no guests selected and no_one not checked, return error.
         if len(selected_guests) == 0 and no_one is None:
-            #opening database only to get names again
-            connection = sqlite3.connect(database)
-            cursor = connection.cursor()
-
-            cursor.execute(
-                "SELECT guest_id, first_name, last_name FROM guests WHERE invite_id = ?",
-                (invite_id,)
+            #Retrieve from database only to get names again to redisplay them due to the error.
+            # utilizing the fetch_data function. (Sprint 2 [S2-31] update)
+            guests = fetch_data(
+                "SELECT guest_id, first_name, last_name FROM guests WHERE invite_id = ?", #query section
+                (invite_id,) #parameters section
             )
-            guests = cursor.fetchall()
-            connection.close()
             #returning to RSVP page with error message and proper guest names again.
             return render_template(
                 "rsvp.html", guests=guests, error="Please select at least one guest or check 'No one is attending'."
@@ -220,18 +203,14 @@ def rsvp(invite_id):
 
     
     #----------------------- INITIAL PAGE LOAD (GET GUEST)-----------------------
-    #entering sql again
-    connection = sqlite3.connect(database)
-    cursor = connection.cursor()
     # using invite_id again to now fetch the names of the guest associated with that invitation.
-    cursor.execute(
-        "SELECT guest_id, first_name, last_name FROM guests WHERE invite_id = ?",
-        (invite_id,)
+    #this varble grabes all informaiton HTML is requesting to completersvp form by providing a list sebreated by tuples.
+    # The fetch_data function is used to execute the SQL query and return the results. (Sprint 2 [S2-31] update)
+    guests = fetch_data(
+        "SELECT guest_id, first_name, last_name FROM guests WHERE invite_id = ?", #query section
+        (invite_id,) #parameters section
     )
-    #this varble grabes all informaiton we requested above in a list sebreated by tuples.
-    guests = cursor.fetchall()
-    #CLOSE database connection after fetching guest details!
-    connection.close()   
+     
     return render_template("rsvp.html", guests=guests)  #Now here we are sending guests information to guests in HTML
 
 
@@ -244,28 +223,19 @@ def meal(invite_id):
 
     #---------------------- INITIAL PAGE LOAD (GET GUEST)---------------------------
 
-    # Open database connection
-    connection = sqlite3.connect(database)
-    cursor = connection.cursor()
-
     # Retrieve only attending guests from the current invitation
     # Using SQL instead of carry over so login page can send over as well without needing rsvp()
-    cursor.execute(
-        "SELECT guest_id, first_name, last_name FROM guests WHERE invite_id = ? AND rsvp_status = 'Attending'",
-        (invite_id,)
+    # The fetch_data function is used to execute the SQL query and return the results. (Sprint 2 [S2-31] update)
+    guests = fetch_data(
+        "SELECT guest_id, first_name, last_name FROM guests WHERE invite_id = ? AND rsvp_status = 'Attending'", #query section
+        (invite_id,) #parameters section
     )
 
-    guests = cursor.fetchall()
-
-    # Retrieve all meal options
-    cursor.execute(
-        "SELECT meal_id, meal_name FROM meal_options"
+    # Retrieve all meal options within the database
+    # The fetch_data function is used to execute the SQL query and return the results. (Sprint 2 [S2-31] update)
+    meal_options = fetch_data(
+        "SELECT meal_id, meal_name FROM meal_options" #query section
     )
-
-    meal_options = cursor.fetchall()
-
-    # Close database
-    connection.close()
 
     #----------------------- HANDLE MEAL FORM SUBMISSION -----------------------
     if request.method == "POST":
@@ -340,28 +310,20 @@ def meal(invite_id):
 @app.route("/rsvp_list/<int:invite_id>")
 def rsvp_list(invite_id):
 
-    # Open database connection
-    connection = sqlite3.connect(database)
-    cursor = connection.cursor()
-
     # Retrieve guests associated with current invitation only
-    cursor.execute(
-        "SELECT first_name, last_name, rsvp_status FROM guests WHERE invite_id = ?",
-        (invite_id,)
+    # The fetch_data function is used to execute the SQL query and return the results. (Sprint 2 [S2-31] update)
+    invitation_guests = fetch_data(
+        "SELECT first_name, last_name, rsvp_status FROM guests WHERE invite_id = ?", #query section
+        (invite_id,) #parameter section
     )
-    # HTML variable
-    invitation_guests = cursor.fetchall()
 
     # Retrieve all invited guests
     # Invitation guest show up here as well. Supper easy coding this way. 
-    cursor.execute(
-        "SELECT first_name, last_name, rsvp_status FROM guests"
+    # The fetch_data function is used to execute the SQL query and return the results. (Sprint 2 [S2-31] update)
+    all_guests = fetch_data(
+        "SELECT first_name, last_name, rsvp_status FROM guests" #query section
     )
-    # HTML variable
-    all_guests = cursor.fetchall()
 
-    # Close database connection
-    connection.close()
 
     # Send both guest lists to HTML
     return render_template(
@@ -377,12 +339,10 @@ def rsvp_list(invite_id):
 @app.route("/meal_list/<int:invite_id>")
 def meal_list(invite_id):
 
-    # Open database connection
-    connection = sqlite3.connect(database)
-    cursor = connection.cursor()
 
     # Retrieve saved meals associated with invitation
-    cursor.execute(
+    # The fetch_data function is used to execute the SQL query and return the results. (Sprint 2 [S2-31] update)
+    invitation_meals = fetch_data(
         """SELECT guests.first_name, guests.last_name, meal_options.meal_name
         FROM guests
         JOIN meal_selections
@@ -390,36 +350,33 @@ def meal_list(invite_id):
         JOIN meal_options
         ON meal_selections.meal_id = meal_options.meal_id
         WHERE guests.invite_id = ?
-        AND guests.rsvp_status = 'Attending'""",
-        (invite_id,)
+        AND guests.rsvp_status = 'Attending'""", #query section
+        (invite_id,) #parameter section
     )
 
-    invitation_meals = cursor.fetchall()
 
     # Retrieve all attending guests meal selections
-    cursor.execute(
+    # The fetch_data function is used to execute the SQL query and return the results. (Sprint 2 [S2-31] update)
+    all_meals = fetch_data(
         """SELECT guests.first_name, guests.last_name, meal_options.meal_name
         FROM guests
         JOIN meal_selections
         ON guests.guest_id = meal_selections.guest_id
         JOIN meal_options
         ON meal_selections.meal_id = meal_options.meal_id
-        WHERE guests.rsvp_status = 'Attending'"""
+        WHERE guests.rsvp_status = 'Attending'""" #query section
     )
 
-    all_meals = cursor.fetchall()
 
-    # Close database connection
-    connection.close()
 
     #------------------ MEAL SELECTION TOTALS (S2-23) -------------------
     # Retrieve meal options and their IDs
     meal_options = fetch_data(
-        "SELECT meal_id, meal_name FROM meal_options"
+        "SELECT meal_id, meal_name FROM meal_options" #query section
     )
     # Retrieve saved meal selections
     meal_selections = fetch_data(
-        "SELECT meal_id FROM meal_selections"
+        "SELECT meal_id FROM meal_selections" #query section
     )
 
     # Calculate totals and save in meal_totals variable that send to html
