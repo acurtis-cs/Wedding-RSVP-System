@@ -66,34 +66,36 @@
     <br><br>
 
     <!-- Display all invited guests -->
-    <div class="form-box">
+    <div class="form-box list-box"> <!--list-box is fixing sizing issue with the table-->
 
         <h3>All Invited Guests</h3>
 
-        <table class="guestTable">
-            <tr>
-                <th>Guest Name</th>
-                <th>RSVP Status</th>
-            </tr>
+        <table class="guestTable sortable-table filterable-table">
+            <thead>
+                <tr>
+                    <th><button type="button" class="sort-by-name">Guest Name <span>-</span></button></th>
+                    <th><select class="filter-by-value" aria-label="Filter RSVP Status"><option value="">RSVP Status</option></select></th>
+                </tr> 
+            </thead>
 
-            <!-- Display every guest from database -->
-            {% for guest in all_guests %}
-            <tr>
-                <td>{{ guest[0] }} {{ guest[1] }}</td> <!--First and Last name-->
-                
-                <td> <!--RSVP Status-->
-                    <span class="rsvpStatus
-                        {% if guest[2] == 'Attending' %}yes
-                        {% elif guest[2] == 'Not Responded' %}wait
-                        {% elif guest[2] == 'Not Attending' %}no
-                        {% endif %}">
-
-                        {{ guest[2] }}
-
-                    </span>
-                </td>
-            </tr>
-            {% endfor %}
+            <tbody>
+                <!-- Display every guest from database -->
+                {% for guest in all_guests %}
+                <tr data-first-name="{{ guest[0] }}">
+                    <td>{{ guest[0] }} {{ guest[1] }}</td> <!--First and Last name-->
+                    
+                    <td> <!--RSVP Status-->
+                        <span class="rsvpStatus
+                            {% if guest[2] == 'Attending' %}yes
+                            {% elif guest[2] == 'Not Responded' %}wait
+                            {% elif guest[2] == 'Not Attending' %}no
+                            {% endif %}">
+                            {{ guest[2] }}
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
 
         </table>
 
@@ -113,6 +115,7 @@
 		</a>
 
 	</div>
-
+    <script src="{{ url_for('static', filename='js/list-sort.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/list-filter.js') }}"></script>
 </body>
 </html>

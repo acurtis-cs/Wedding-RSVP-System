@@ -39,6 +39,75 @@ h2, h3{
     cursor: not-allowed;
 }
 
+/* Wider container for RSVP and Meal Lists */
+.list-box {
+    width: 450px;
+    max-width: 90%;
+}
+
+
+
+
+
+/* ---------Sort button styling ---------- */
+
+
+/* Guest Name Sorting Button (S2-26 and S2-28) */
+.sort-by-name {
+    background-color: whitesmoke;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    padding: 6px 12px;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.2s;
+}
+
+/* Hover effect */
+.sort-by-name:hover {
+    background-color: darkgrey;
+}
+
+/* Click effect */
+.sort-by-name:active {
+    background-color: grey;
+}
+
+/* Sorting symbol */
+.sort-by-name span {
+    margin-left: 6px;
+    font-weight: bold;
+}
+
+
+
+
+
+/* ----------Filter dropdown styling -------- */
+
+/* RSVP Status and Meal Selection Filtering (S2-27 and S2-29) */
+.filter-by-value {
+    background-color: whitesmoke;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    padding: 6px 12px;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+/* Hover effect */
+.filter-by-value:hover {
+    background-color: darkgrey;
+}
+
+/* Click effect */
+.filter-by-value:active {
+    background-color: grey;
+}
 
 
 
@@ -49,14 +118,16 @@ h2, h3{
 
 
 
-/************************RSVR_LIST.HTML PAGE ONLY**************************/
-.guest-table {
+
+
+/************************RSVP_LIST.HTML PAGE ONLY**************************/
+.guestTable {
     width: 100%;
     border-collapse: collapse;
 }
 
-.guest-table th,
-.guest-table td {
+.guestTable th,
+.guestTable td {
     border: 1px solid black;
     padding: 10px;
     text-align: left;
@@ -95,7 +166,7 @@ h2, h3{
 /* RSVP Totals Main Container */
 .rsvp-totals {
     border: 2px solid black;
-    width: 550px;
+    width: 700px;
     max-width: 90%;
     box-sizing: border-box;
     padding: 10px;
@@ -139,7 +210,7 @@ h2, h3{
 /************************MEAL_LIST.HTML PAGE ONLY**************************/
 .meal-totals {
     border: 2px solid black;
-    width: 550px;
+    width: 700px;
     max-width: 90%;
     box-sizing: border-box;
     padding: 10px;
