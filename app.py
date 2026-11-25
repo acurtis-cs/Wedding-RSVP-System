@@ -417,4 +417,5 @@ def meal_list(invite_id):
 
 
 
-app.run()
+if __name__ == "__main__":
+    app.run()

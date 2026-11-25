@@ -2,120 +2,118 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <title>Wedding RSVP Guest List</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-</head>
+    <head>
+        <title>Wedding RSVP Guest List</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    </head>
 
-<body>
+    <body>
+        <h2>Wedding RSVP Management System</h2>
+        <h3>RSVP Guest List</h3>
 
-    <h1>Sprint 2</h1>
-    <h2>Wedding RSVP Management System</h2>
-    <h3>RSVP Guest List</h3>
+        <!-- Sprint 2 Nav -->
+        <div class="nav">
 
-    <!-- Sprint 2 Nav -->
-	<div class="nav">
+            <!-- Dashboard -->
+            <a class="navButton" href="{{ url_for('dashboard', invite_id=invite_id) }}">
+                Dashboard
+            </a>
 
-		<!-- Dashboard -->
-		<a class="navButton" href="{{ url_for('dashboard', invite_id=invite_id) }}">
-			Dashboard
-		</a>
+            <!-- Meal Selection List -->
+            <a class="navButton" href="{{ url_for('meal_list', invite_id=invite_id) }}">
+                Meal Selection List
+            </a>
 
-		<!-- Meal Selection List -->
-		<a class="navButton" href="{{ url_for('meal_list', invite_id=invite_id) }}">
-			Meal Selection List
-		</a>
+        </div>
 
-	</div>
+        <!-- Current user's invitation information -->
+        <div class="form-box">
 
-    <!-- Current user's invitation information -->
-    <div class="form-box">
+            <h3>Your Invitation</h3>
 
-        <h3>Your Invitation</h3>
-
-        <table class="guestTable">
-            <tr>
-                <th>Guest Name</th>
-                <th>RSVP Status</th>
-            </tr>
-
-            <!-- Display guests associated with current invitation -->
-            <!-- Received from Flask-->
-            {% for guest in invitation_guests %}
-            <tr>
-                <td>{{ guest[0] }} {{ guest[1] }}</td> <!--First and Last name-->
-
-                <td> <!--RSVP Status-->
-                    <span class="rsvpStatus
-                        {% if guest[2] == 'Attending' %}yes
-                        {% elif guest[2] == 'Not Responded' %}wait
-                        {% elif guest[2] == 'Not Attending' %}no
-                        {% endif %}">
-
-                        {{ guest[2] }}
-
-                    </span>
-                </td> 
-            </tr>
-            {% endfor %}
-
-        </table>
-
-    </div>
-
-    <br><br>
-
-    <!-- Display all invited guests -->
-    <div class="form-box list-box"> <!--list-box is fixing sizing issue with the table-->
-
-        <h3>All Invited Guests</h3>
-
-        <table class="guestTable sortable-table filterable-table">
-            <thead>
+            <table class="guestTable">
                 <tr>
-                    <th><button type="button" class="sort-by-name">Guest Name <span>-</span></button></th>
-                    <th><select class="filter-by-value" aria-label="Filter RSVP Status"><option value="">RSVP Status</option></select></th>
-                </tr> 
-            </thead>
+                    <th>Guest Name</th>
+                    <th>RSVP Status</th>
+                </tr>
 
-            <tbody>
-                <!-- Display every guest from database -->
-                {% for guest in all_guests %}
-                <tr data-first-name="{{ guest[0] }}">
+                <!-- Display guests associated with current invitation -->
+                <!-- Received from Flask-->
+                {% for guest in invitation_guests %}
+                <tr>
                     <td>{{ guest[0] }} {{ guest[1] }}</td> <!--First and Last name-->
-                    
+
                     <td> <!--RSVP Status-->
                         <span class="rsvpStatus
                             {% if guest[2] == 'Attending' %}yes
                             {% elif guest[2] == 'Not Responded' %}wait
                             {% elif guest[2] == 'Not Attending' %}no
                             {% endif %}">
+
                             {{ guest[2] }}
+
                         </span>
-                    </td>
+                    </td> 
                 </tr>
                 {% endfor %}
-            </tbody>
 
-        </table>
+            </table>
 
-    </div>
+        </div>
 
-    <!-- Sprint 2 Nav -->
-	<div class="nav">
+        <br><br>
 
-		<!-- Dashboard -->
-		<a class="navButton" href="{{ url_for('dashboard', invite_id=invite_id) }}">
-			Dashboard
-		</a>
+        <!-- Display all invited guests -->
+        <div class="form-box list-box"> <!--list-box is fixing sizing issue with the table-->
 
-		<!-- Meal Selection List -->
-		<a class="navButton" href="{{ url_for('meal_list', invite_id=invite_id) }}">
-			Meal Selection List
-		</a>
+            <h3>All Invited Guests</h3>
 
-	</div>
-    <script src="{{ url_for('static', filename='js/list-sort.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/list-filter.js') }}"></script>
-</body>
+            <table class="guestTable sortable-table filterable-table">
+                <thead>
+                    <tr>
+                        <th><button type="button" class="sort-by-name">Guest Name <span>-</span></button></th>
+                        <th><select class="filter-by-value" aria-label="Filter RSVP Status"><option value="">RSVP Status</option></select></th>
+                    </tr> 
+                </thead>
+
+                <tbody>
+                    <!-- Display every guest from database -->
+                    {% for guest in all_guests %}
+                    <tr data-first-name="{{ guest[0] }}">
+                        <td>{{ guest[0] }} {{ guest[1] }}</td> <!--First and Last name-->
+                        
+                        <td> <!--RSVP Status-->
+                            <span class="rsvpStatus
+                                {% if guest[2] == 'Attending' %}yes
+                                {% elif guest[2] == 'Not Responded' %}wait
+                                {% elif guest[2] == 'Not Attending' %}no
+                                {% endif %}">
+                                {{ guest[2] }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <!-- Sprint 2 Nav -->
+        <div class="nav">
+
+            <!-- Dashboard -->
+            <a class="navButton" href="{{ url_for('dashboard', invite_id=invite_id) }}">
+                Dashboard
+            </a>
+
+            <!-- Meal Selection List -->
+            <a class="navButton" href="{{ url_for('meal_list', invite_id=invite_id) }}">
+                Meal Selection List
+            </a>
+
+        </div>
+        <script src="{{ url_for('static', filename='js/list-sort.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/list-filter.js') }}"></script>
+    </body>
 </html>

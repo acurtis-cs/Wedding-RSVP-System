@@ -1,124 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <title>Wedding Meal Selection List</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-</head>
+    <head>
+        <title>Wedding Meal Selection List</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    </head>
 
-<body>
+    <body>
+        <h2>Wedding RSVP Management System</h2>
+        <h3>Meal Selection List</h3>
 
-    <h1>Sprint 2</h1>
-    <h2>Wedding RSVP Management System</h2>
-    <h3>Meal Selection List</h3>
+        <!-- Sprint 2 Nav -->
+        <div class="nav">
 
-    <!-- Sprint 2 Nav -->
-	<div class="nav">
+            <!-- Dashboard -->
+            <a class="navButton" href="{{ url_for('dashboard', invite_id=invite_id) }}">
+                Dashboard
+            </a>
 
-		<!-- Dashboard -->
-		<a class="navButton" href="{{ url_for('dashboard', invite_id=invite_id) }}">
-			Dashboard
-		</a>
+            <!-- RSVP Guest List -->
+            <a class="navButton" href="{{ url_for('rsvp_list', invite_id=invite_id) }}">
+                RSVP Guest List
+            </a>
 
-		<!-- RSVP Guest List -->
-		<a class="navButton" href="{{ url_for('rsvp_list', invite_id=invite_id) }}">
-            RSVP Guest List
-        </a>
-
-	</div>
-
-
-    <!-- Meal Selection Totals (S2-24) -->
-    <div class="meal-totals">
-        <h3>Meal Selection Totals</h3>
-
-        <div class="mealTotalsGrid">
-            {% for meal_name, count in meal_totals.items() %}
-                <div class="mealTotalCard">
-                    <h3>{{ count }}</h3>
-                    <p>{{ meal_name }}</p>
-                </div>
-            {% endfor %}
         </div>
-    </div>
 
 
-    <!-- Current user's invitation meals -->
-    <div class="form-box">
+        <!-- Meal Selection Totals (S2-24) -->
+        <div class="meal-totals">
+            <h3>Meal Selection Totals</h3>
 
-        <h3>Your Meals</h3>
-
-        <table class="guestTable">
-            <tr>
-                <th>Guest Name</th>
-                <th>Meal Selection</th>
-            </tr>
-
-            <!-- Display guests associated with current invitation -->
-            <!-- Received from Flask-->
-            {% if invitation_meals %}
-                {% for guest in invitation_meals %}
-                <tr>
-                    <td>{{ guest[0] }} {{ guest[1] }}</td>
-                    <td>{{ guest[2] }}</td>
-                </tr>
+            <div class="mealTotalsGrid">
+                {% for meal_name, count in meal_totals.items() %}
+                    <div class="mealTotalCard">
+                        <h3>{{ count }}</h3>
+                        <p>{{ meal_name }}</p>
+                    </div>
                 {% endfor %}
-            {% else %}
+            </div>
+        </div>
+
+
+        <!-- Current user's invitation meals -->
+        <div class="form-box">
+
+            <h3>Your Meals</h3>
+
+            <table class="guestTable">
                 <tr>
-                    <td colspan="2"> <!--Spreads across both columns-->
-                        Your party currently has no meals selected.<br>
-                        If your attending select meals now.
-                    </td>
+                    <th>Guest Name</th>
+                    <th>Meal Selection</th>
                 </tr>
-            {% endif %}
 
-        </table>
+                <!-- Display guests associated with current invitation -->
+                <!-- Received from Flask-->
+                {% if invitation_meals %}
+                    {% for guest in invitation_meals %}
+                    <tr>
+                        <td>{{ guest[0] }} {{ guest[1] }}</td>
+                        <td>{{ guest[2] }}</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="2"> <!--Spreads across both columns-->
+                            Your party currently has no meals selected.<br>
+                            If your attending select meals now.
+                        </td>
+                    </tr>
+                {% endif %}
 
-    </div>
+            </table>
 
-    <br><br>
+        </div>
 
-    <!-- Display all invited guests -->
-    <div class="form-box list-box"> <!--list-box is fixing sizing issue with the table-->
+        <br><br>
 
-        <h3>All Meal Selections</h3>
+        <!-- Display all invited guests -->
+        <div class="form-box list-box"> <!--list-box is fixing sizing issue with the table-->
 
-        <table class="guestTable sortable-table filterable-table">
-            <thead>
-                <tr>
-                    <th><button type="button" class="sort-by-name">Guest Name <span>-</span></button></th>
-                    <th><select class="filter-by-value" aria-label="Filter Meal Selection"><option value="">Meal Selection</option></select></th>
-                </tr>
-            </thead>
+            <h3>All Meal Selections</h3>
 
-            <tbody>
-                <!-- Display every guest from database -->
-                {% for guest in all_meals %}
-                <tr data-first-name="{{ guest[0] }}">
-                    <td>{{ guest[0] }} {{ guest[1] }}</td> <!--First and Last name-->
-                    <td>{{ guest[2] }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
+            <table class="guestTable sortable-table filterable-table">
+                <thead>
+                    <tr>
+                        <th><button type="button" class="sort-by-name">Guest Name <span>-</span></button></th>
+                        <th><select class="filter-by-value" aria-label="Filter Meal Selection"><option value="">Meal Selection</option></select></th>
+                    </tr>
+                </thead>
 
-        </table>
-    </div>
+                <tbody>
+                    <!-- Display every guest from database -->
+                    {% for guest in all_meals %}
+                    <tr data-first-name="{{ guest[0] }}">
+                        <td>{{ guest[0] }} {{ guest[1] }}</td> <!--First and Last name-->
+                        <td>{{ guest[2] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
 
-    <!-- Sprint 2 Nav -->
-	<div class="nav">
+            </table>
+        </div>
 
-		<!-- Dashboard -->
-		<a class="navButton" href="{{ url_for('dashboard', invite_id=invite_id) }}">
-			Dashboard
-		</a>
+        <!-- Sprint 2 Nav -->
+        <div class="nav">
 
-		<!-- RSVP Guest List -->
-		<a class="navButton" href="{{ url_for('rsvp_list', invite_id=invite_id) }}">
-            RSVP Guest List
-        </a>
+            <!-- Dashboard -->
+            <a class="navButton" href="{{ url_for('dashboard', invite_id=invite_id) }}">
+                Dashboard
+            </a>
 
-	</div>
-    <script src="{{ url_for('static', filename='js/list-filter.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/list-sort.js') }}"></script>
-</body>
+            <!-- RSVP Guest List -->
+            <a class="navButton" href="{{ url_for('rsvp_list', invite_id=invite_id) }}">
+                RSVP Guest List
+            </a>
+
+        </div>
+        <script src="{{ url_for('static', filename='js/list-filter.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/list-sort.js') }}"></script>
+    </body>
 </html>

@@ -32,15 +32,14 @@ h2, h3{
     text-decoration: none;
     cursor: pointer;
     font-weight: bold;
+    font-family: inherit;
+    font-size: inherit;
 }
 
 .navButton:disabled {
     background-color: lightgrey;
     color: grey;
-    cursor: not-allowed;
-    font-family: inherit;
-    font-size: inherit;
-    
+    cursor: not-allowed;   
 }
 
 /* Wider container for RSVP and Meal Lists */

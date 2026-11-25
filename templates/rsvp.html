@@ -1,70 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <title>Wedding RSVP Form</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-</head>
+	<head>
+		<title>Wedding RSVP Form</title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+	</head>
 
-<body>
-
-    <h1>Sprint 2</h1>
-    <h2>Wedding RSVP Management System</h2>
-    <h3>Wedding RSVP Form</h3>
-	
-	<!-- Reusing form box from login page (SPRINT 1 LOGIC) -->
-	<div class="form-box">
-		<!-- form to obtain every guest sent by Flask and send into Flask-->
-        <form method="POST">
+	<body>
+		<h2>Wedding RSVP Management System</h2>
+		<h3>Wedding RSVP Form</h3>
 		
-		<!--error catch if submission was sent blank -->
-		<!--javscript should catch this in future to prevent this but backup coded in -->
-		{% if error %}
-			<p>{{ error }}</p> <!--error message coded in python --> 
-		{% endif %}
-		<!-- Grabs Flask list, and collects the data one tuple at time-->
-        {% for guest in guests %}
-			<!-- Sprint 3 logic to check if the guest is attending and check the box if they are for the edit RSVP feature -->
-            <input
-                type="checkbox"
-                id="guest{{ guest[0] }}"
-                name="guest"
-                value="{{ guest[0] }}"
-				{% if guest[3] == "Attending" and not error %}checked{% endif %}
-    			{% if no_one_attending %}disabled{% endif %}
-            >
-			<!-- taking the tuple and grabing the full name located within it to display -->
-            <label for="guest{{ guest[0] }}">
-                {{ guest[1] }} {{ guest[2] }}
-            </label>
-			<!-- br breaks the data to start new line. -->
-            <br>
+		<!-- Reusing form box from login page (SPRINT 1 LOGIC) -->
+		<div class="form-box">
+			<!-- form to obtain every guest sent by Flask and send into Flask-->
+			<form method="POST">
+			
+			<!--error catch if submission was sent blank -->
+			<!--javscript should catch this in future to prevent this but backup coded in -->
+			{% if error %}
+				<p>{{ error }}</p> <!--error message coded in python --> 
+			{% endif %}
+			<!-- Grabs Flask list, and collects the data one tuple at time-->
+			{% for guest in guests %}
+				<!-- Sprint 3 logic to check if the guest is attending and check the box if they are for the edit RSVP feature -->
+				<input
+					type="checkbox"
+					id="guest{{ guest[0] }}"
+					name="guest"
+					value="{{ guest[0] }}"
+					{% if guest[3] == "Attending" and not error %}checked{% endif %}
+					{% if no_one_attending %}disabled{% endif %}
+				>
+				<!-- taking the tuple and grabing the full name located within it to display -->
+				<label for="guest{{ guest[0] }}">
+					{{ guest[1] }} {{ guest[2] }}
+				</label>
+				<!-- br breaks the data to start new line. -->
+				<br>
 
-        {% endfor %}
-		
-			<br>
-			<!-- Sprint 3 logic to check if no one is attending and check the box if they are for the edit RSVP feature -->
-			<input
-				type="checkbox"
-				id="no_one"
-				name="no_one"
-				value="no_one"
-				{% if no_one_attending %}checked{% endif %}
-			>
+			{% endfor %}
+			
+				<br>
+				<!-- Sprint 3 logic to check if no one is attending and check the box if they are for the edit RSVP feature -->
+				<input
+					type="checkbox"
+					id="no_one"
+					name="no_one"
+					value="no_one"
+					{% if no_one_attending %}checked{% endif %}
+				>
 
-			<label for="no_one">
-				No one is attending
-			</label>
+				<label for="no_one">
+					No one is attending
+				</label>
 
-			<br><br>
+				<br><br>
 
-			<button type="submit">Submit RSVP</button>
+				<button type="submit">Submit RSVP</button>
 
-		</form>
-	</div>
-	<!-- connecting to my RSVP.js instrucitons for page rules-->
-	<script src="{{ url_for('static', filename='js/rsvp.js') }}"></script>
+			</form>
+		</div>
+		<!-- connecting to my RSVP.js instrucitons for page rules-->
+		<script src="{{ url_for('static', filename='js/rsvp.js') }}"></script>
 
-</body>
-
+	</body>
 </html>
