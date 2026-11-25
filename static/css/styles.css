@@ -35,8 +35,12 @@ h2, h3{
 }
 
 .navButton:disabled {
-    opacity: 0.5;
+    background-color: lightgrey;
+    color: grey;
     cursor: not-allowed;
+    font-family: inherit;
+    font-size: inherit;
+    
 }
 
 /* Wider container for RSVP and Meal Lists */

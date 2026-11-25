@@ -105,6 +105,8 @@ def dashboard(invite_id):
         AND guests.rsvp_status = 'Attending'""", #query section
         (invite_id,) #parameter section
     )
+    # Check if at least one guest is attending (Sprint 3)
+    has_attending = len(meal_results) > 0
 
     # Check if attending guests is missing a meal
     missing_meal = False
@@ -126,8 +128,8 @@ def dashboard(invite_id):
     # Call our calculation function from calculations.py providing the guests list
     totals = calculate_rsvp_totals(guests)
 
-    # Render the dashboard with the calculated RSVP totals and current invite_id
-    return render_template("dashboard.html", invite_id=invite_id, totals=totals)
+    # Render the dashboard with the calculated RSVP totals and current invite_id, totals rsvp, and has_attending variable to be used in HTML.
+    return render_template("dashboard.html", invite_id=invite_id, totals=totals, has_attending=has_attending)
 
 
 # RSVP page FORM displays when no RSVP (SPRINT 1 LOGIC )

@@ -35,6 +35,27 @@
 
 		</div>
 
+		<!-- Sprint 3 Edit Options -->
+		<div class="nav">
+
+			<!-- Edit RSVP -->
+			<a class="navButton" href="{{ url_for('rsvp', invite_id=invite_id) }}">
+				Edit RSVP
+			</a>
+
+			<!-- Edit Meal Selection -->
+			{% if has_attending %} <!-- Sprint 3 logic to check if at least one guest is attending then button is enabled -->
+				<a class="navButton" href="{{ url_for('meal', invite_id=invite_id) }}">
+					Edit Meal Selection
+				</a>
+			{% else %} <!-- Sprint 3 logic to check if no guests are attending then button is disabled -->
+				<button class="navButton" disabled>
+					Edit Meal Selection
+				</button>
+			{% endif %}
+
+		</div>
+
 
 		<!-- RSVP Attendance Totals (S2-21) -->
 		<div class="rsvp-totals"> 
