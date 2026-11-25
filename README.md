@@ -5,9 +5,11 @@
 ## Project Objective
 Build a Wedding RSVP Management System that allows invited guests to log in using an authorized email, submit and manage RSVP responses, and select meals for the wedding reception.
 
+## Sprint 3 Goal (11/5/2026)
+Complete and polish the Wedding RSVP Management System by allowing guests to edit their previously submitted RSVP responses and meal selections. Ensure that changes are saved correctly in SQLite, meal selections remain consistent with attendance statuses, and the application automatically redirects guests when meal selections are required.
+
 ## Updated Sprint 2 Goal (11/01/2026)
 Allow wedding guests to select meals for attending guests, view current RSVP statuses and meal selections, attendance totals, meal totals, sorting, and filtering to easily review wedding guest information.
-
 
 ## Sprint 2 Goal (10/23/2026)
 Allow a wedding guest to select meals for their party, view updated RSVP statuses and meal selections within their respectable tabs.
@@ -68,19 +70,21 @@ This application requires a Flask secret key stored in a local .env file.
 4. Save the file.
 .env file will not push to GitHub due to being in the .gitignore file.
 
-DB Browser SQLite must have guest rsvp_status as "Not Responded" for sprint 1 to work
+To test the application from the beginning, reset RSVP statuses and meal selections using DB Browser for SQLite. This is optional and removes all saved responses and meals, but preserves invitations, guests, emails, and meal options.
 1. Open file wedding.db using application DB Browser for SQLite.
 
 2. Click “Browse Data” tab, click the drop down setting for “Table:” and choose “guest_invite_view”.
 
 3. Examine guest rsvp_status and confirm column says, “Not Responded” (Application case sensitive). Also review emails for email login credentials.
 
-4. If rsvp_status is not in desire state click “Execute SQL” tab.
+4. If a fresh demonstration is desired, click the “Execute SQL” tab. Back up `wedding.db` first if you want to preserve the existing responses.
 
-5. Place command: UPDATE guests SET rsvp_status = 'Not Responded';
+5. Place each command: 
+    - DELETE FROM meal_selections;
+    - UPDATE guests SET rsvp_status = 'Not Responded';
 
 6. Click “Execute all” and then save your changes by clicking “Write Changes”
-This saves your database information in the desire state to test Sprint 1. 
+This resets the database to test the original RSVP and meal selection workflow.
 
 
 
@@ -190,6 +194,38 @@ The following steps are reviewer instructions for user stories completed during 
     6. Select Meal Selection again in dropdown to restore all meal selections.
 
 
+### Trying the Sprint 3 Functionality
+
+The following steps are reviewer instructions for the editing functionality completed during Sprint 3.
+
+- Edit RSVP
+    1. Log in using an invitation with completed RSVP and meal selections, if applicable.
+    2. Select the Edit RSVP button on the dashboard.
+    3. Verify that guests previously marked as Attending are already checked. If everyone previously declined, verify that No one is attending is checked and the individual guest checkboxes are disabled.
+    4. Change an attending guest to Not Attending by unchecking their checkbox and submit the form. If nobody is attending, select No one is attending before submitting.
+    5. Verify that the updated RSVP status is saved and the guest's associated meal selection is removed from wedding.db.
+    6. Verify that the meal selections of guests who remain attending are preserved.
+    7. Change a guest from Not Attending to Attending and submit the RSVP form.
+    8. Verify that the application automatically redirects to the Meal Selection Form. Previously saved meals should remain selected, and the newly attending guest should have no meal selected.
+    9. Select a meal for the newly attending guest and submit. Verify that the application returns to the dashboard and the saved information is correct.
+
+- Edit Meal Selection
+    1. Log in using an invitation with at least one attending guest and completed meal selections.
+    2. Select the Edit Meal Selection button on the dashboard.
+    3. Verify that only attending guests associated with the current invitation appear and their previously saved meals are selected.
+    4. Change one or more meal selections and submit the form.
+    5. Verify that the existing meal selections are updated in wedding.db using the guest IDs, without creating duplicate records.
+    6. Open the Meal Selection List and verify that the updated selections and meal totals are displayed correctly.
+
+- Disabled Meal Editing
+    1. Open Edit RSVP from the dashboard and select No one is attending.
+    2. Submit the RSVP form and verify that the application returns to the dashboard.
+    3. Verify that Edit Meal Selection is greyed out and cannot be clicked.
+    4. Confirm that all meal selections associated with that invitation have been deleted and the RSVP and meal totals reflect the changes.
+    5. Open Edit RSVP again, uncheck No one is attending, select an attending guest, and submit.
+    6. Complete the required meal selection and verify that Edit Meal Selection is enabled again on the dashboard.
+
+
 
 ### Automated Testing (Sprint 2)
 
@@ -236,5 +272,5 @@ The automated tests verify the calculation, sorting, and filtering logic. Dashbo
 
 ### Known limitations
 
-Current abilities of the application allow guests to submit RSVP responses, select meals, view RSVP and meal information, and sort or filter guest and meal list. Users can't delete or edit RSVP or meals after submission. Application currently has no user ability to initiate RSVP or meal selection, the system atomically initiates RSVP form then meal form after login if user’s party has RSVP status “Not Responded” or RSVP status "Attending" with no meal selection. Meal options must be managed directly in SQLite. Login currently uses an authorized email without password authentication.
+The application allows guests to submit and edit RSVP responses and meal selections, view wedding attendance and meal information, and sort or filter guest and meal lists. RSVP and meal changes are made through the current invitation's forms. The application does not include an administrative interface. Therefore, the wedding couple cannot add or delete invited guests, invitations, or meal options through the application. These changes must be managed directly in SQLite using DB Browser for SQLite. Login currently uses an authorized email without password authentication. This application is not safe for public deployment due to limited authentication and access controls. 
 
