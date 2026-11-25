@@ -24,12 +24,14 @@
 		{% endif %}
 		<!-- Grabs Flask list, and collects the data one tuple at time-->
         {% for guest in guests %}
-
+			<!-- Sprint 3 logic to check if the guest is attending and check the box if they are for the edit RSVP feature -->
             <input
                 type="checkbox"
                 id="guest{{ guest[0] }}"
                 name="guest"
                 value="{{ guest[0] }}"
+				{% if guest[3] == "Attending" and not error %}checked{% endif %}
+    			{% if no_one_attending %}disabled{% endif %}
             >
 			<!-- taking the tuple and grabing the full name located within it to display -->
             <label for="guest{{ guest[0] }}">
@@ -41,12 +43,13 @@
         {% endfor %}
 		
 			<br>
-
+			<!-- Sprint 3 logic to check if no one is attending and check the box if they are for the edit RSVP feature -->
 			<input
 				type="checkbox"
 				id="no_one"
 				name="no_one"
 				value="no_one"
+				{% if no_one_attending %}checked{% endif %}
 			>
 
 			<label for="no_one">

@@ -151,7 +151,7 @@ def rsvp(invite_id):
             #Retrieve from database only to get names again to redisplay them due to the error.
             # utilizing the fetch_data function. (Sprint 2 [S2-31] update)
             guests = fetch_data(
-                "SELECT guest_id, first_name, last_name FROM guests WHERE invite_id = ?", #query section
+                "SELECT guest_id, first_name, last_name, rsvp_status FROM guests WHERE invite_id = ?", #query section
                 (invite_id,) #parameters section
             )
             #returning to RSVP page with error message and proper guest names again.
@@ -186,22 +186,26 @@ def rsvp(invite_id):
                     "UPDATE guests SET rsvp_status = 'Attending' WHERE guest_id = ? AND invite_id = ?",
                     (guest_id, invite_id)
                 )
+        # Delete meal selections for guests no longer attending (Sprint 3) during edit RSVP. This ensures that meal selections are only kept for guests who are attending.
+        cursor.execute(
+            """DELETE FROM meal_selections
+            WHERE guest_id IN (
+                SELECT guest_id FROM guests
+                WHERE invite_id = ?
+                AND rsvp_status = 'Not Attending'
+            )""",
+            (invite_id,)
+)
         # Saving changes to the database.
         connection.commit()
         connection.close()
                 
         #-------------------- REDIRECT AFTER RSVP ---------------------------
 
-        # If no one is attending, return to dashboard.
-        # Simple check
-        if no_one is not None:
-            flash("RSVP submitted successfully.")
-            return redirect(url_for("dashboard", invite_id=invite_id))
-
-        # If guests are attending, send them to Meal Selection Form.
-        else:
-            flash("RSVP submitted successfully.")
-            return redirect(url_for("meal", invite_id=invite_id))
+        #Sprint 3 update utlizing login rediect within dashboard if meal is missing. 
+        # Redirect to dashboard to determine if meal selection is required. Dashboard has the logic to redirect to meal selection if needed.
+        flash("RSVP submitted successfully.")
+        return redirect(url_for("dashboard", invite_id=invite_id))
 
     
     #----------------------- INITIAL PAGE LOAD (GET GUEST)-----------------------
@@ -209,11 +213,18 @@ def rsvp(invite_id):
     #this varble grabes all informaiton HTML is requesting to completersvp form by providing a list sebreated by tuples.
     # The fetch_data function is used to execute the SQL query and return the results. (Sprint 2 [S2-31] update)
     guests = fetch_data(
-        "SELECT guest_id, first_name, last_name FROM guests WHERE invite_id = ?", #query section
+        "SELECT guest_id, first_name, last_name, rsvp_status FROM guests WHERE invite_id = ?", #query section
         (invite_id,) #parameters section
     )
+    # Check if at least one guest is attending (Sprint 3) if not we check the box of no one attending on the render form during rsvp edit.
+    no_one_attending = len(guests) > 0
+
+    for guest in guests:
+        if guest[3] != "Not Attending":
+            no_one_attending = False
+            break
      
-    return render_template("rsvp.html", guests=guests)  #Now here we are sending guests information to guests in HTML
+    return render_template("rsvp.html", guests=guests, no_one_attending=no_one_attending)  #Now here we are sending guests information to guests in HTML
 
 
 
