@@ -240,7 +240,14 @@ def meal(invite_id):
     # Using SQL instead of carry over so login page can send over as well without needing rsvp()
     # The fetch_data function is used to execute the SQL query and return the results. (Sprint 2 [S2-31] update)
     guests = fetch_data(
-        "SELECT guest_id, first_name, last_name FROM guests WHERE invite_id = ? AND rsvp_status = 'Attending'", #query section
+        # Using SQL to grab only attending guests and their meal selections for the current invitation to assit with the meal edit feature. (Sprint 3)
+        """SELECT guests.guest_id, guests.first_name, guests.last_name,
+        meal_selections.meal_id
+        FROM guests
+        LEFT JOIN meal_selections
+        ON guests.guest_id = meal_selections.guest_id
+        WHERE guests.invite_id = ?
+        AND guests.rsvp_status = 'Attending'""", #query section
         (invite_id,) #parameters section
     )
 
@@ -285,7 +292,11 @@ def meal(invite_id):
                 selected_meal = request.form.get("meal_" + str(guest_id))
 
                 cursor.execute(
-                    "INSERT INTO meal_selections (guest_id, meal_id) VALUES (?, ?)",
+                    # Using UPSERT to insert or update meal selections for each guest. 
+                    # This ensures that if a guest has already made a selection, it will be updated instead of causing an error and initializing exception. (Sprint 3)
+                    """INSERT INTO meal_selections (guest_id, meal_id) VALUES (?, ?)
+                    ON CONFLICT(guest_id)
+                    DO UPDATE SET meal_id = excluded.meal_id""",
                     (guest_id, selected_meal)
                 )
             # Submitting meal selection.

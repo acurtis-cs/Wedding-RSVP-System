@@ -1,67 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <title>Wedding Meal Selection Form</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-</head>
+    <head>
+        <title>Wedding Meal Selection Form</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    </head>
 
-<body>
+    <body>
 
-    <h1>Sprint 2</h1>
-    <h2>Wedding RSVP Management System</h2>
-    <h3>Wedding Meal Selection Form</h3>
-	
-	<!-- Reusing form box from login page (SPRINT 1 LOGIC) -->
-	<div class="form-box">
-		<!-- form to obtain every guest sent by Flask and send into Flask-->
-        <form method="POST">
-		
-		<!--error catch -->
-		<!--javscript should catch this in future to prevent this but backup coded in -->
-		{% if error %}
-			<p>{{ error }}</p> <!--error message coded in python --> 
-		{% endif %}
-
-		<!-- Flask will send ONLY the guest marked Attending-->
-        {% for guest in guests %}
-			
-			<!--Sprint 2 lOGIC-->
-			<!-- taking each full name located in list within it to display -->
-			<label for="meal_{{ guest[0] }}">
-                {{ guest[1] }} {{ guest[2] }}
-            </label>
+        <h2>Wedding RSVP Management System</h2>
+        <h3>Wedding Meal Selection Form</h3>
+        
+        <!-- Reusing form box from login page (SPRINT 1 LOGIC) -->
+        <div class="form-box">
+            <!-- form to obtain every guest sent by Flask and send into Flask-->
+            <form method="POST">
             
-				<!-- Unique ID for each attending guest-->
-                <select id="meal_{{ guest[0] }}"
-                        name="meal_{{ guest[0] }}"
-                        required> <!--HTML force layer of needing slection before submitting-->
-					
-					<!--Displays when page loads, can not be selected-->
-					<option value="" disabled selected>
-                        Select a meal
-                    </option>
+            <!--error catch -->
+            <!--javscript should catch this in future to prevent this but backup coded in -->
+            {% if error %}
+                <p>{{ error }}</p> <!--error message coded in python --> 
+            {% endif %}
 
-                    <!-- Displays all meal choices from meal_options table -->
-                    {% for meal in meal_options %}
-                        <option value="{{ meal[0] }}"> <!--Unique ID of the meal (used for submission)-->
-                            {{ meal[1] }}
+            <!-- Flask will send ONLY the guest marked Attending-->
+            {% for guest in guests %}
+                
+                <!--Sprint 2 lOGIC-->
+                <!-- taking each full name located in list within it to display -->
+                <label for="meal_{{ guest[0] }}">
+                    {{ guest[1] }} {{ guest[2] }}
+                </label>
+                
+                    <!-- Unique ID for each attending guest-->
+                    <select id="meal_{{ guest[0] }}"
+                            name="meal_{{ guest[0] }}"
+                            required> <!--HTML force layer of needing slection before submitting-->
+                        
+                        <!--Displays when page loads, can not be selected-->
+                        <option value="" disabled {% if guest[3] is none %}selected{% endif %}> <!-- This option is selected if the guest has no meal selection -->
+                            Select a meal
                         </option>
-                    {% endfor %}
 
-                </select>
+                        <!-- Displays all meal choices from meal_options table -->
+                        {% for meal in meal_options %}
+                            <!--Unique ID of the meal (used for submission)-->
+                            <option value="{{ meal[0] }}" 
+                                {% if meal [0] == guest[3] %}selected{% endif %}> <!-- This option is selected if the guest's meal selection matches the meal ID -->
+                                {{ meal[1] }}
+                            </option>
+                        {% endfor %}
 
-                <br><br>
-			 <!--/Sprint 2 lOGIC-->
-            {% endfor %}
+                    </select>
 
-			<button type="submit">Submit Meal Selection</button>
+                    <br><br>
+                <!--/Sprint 2 lOGIC-->
+                {% endfor %}
 
-		</form>
-	</div>
-	<!-- connecting to my RSVP.js instrucitons for page rules-->
-	<script src="{{ url_for('static', filename='js/rsvp.js') }}"></script>
+                <button type="submit">Submit Meal Selection</button>
 
-</body>
+            </form>
+        </div>
 
+    </body>
 </html>
